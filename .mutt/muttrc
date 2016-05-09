@@ -1,0 +1,46 @@
+
+# stewa02 mutt configuration file
+
+# Passwordfile
+source "gpg -dq $HOME/<DELETED>.mutt.gpg |"
+
+# Basic configuration for receiving and sending mails
+set ssl_starttls     = yes
+set ssl_force_tls    = yes
+set imap_user        = '<DELETED>'
+set imap_pass        = $my_password
+set from             = '<DELETED>'
+set realname         = '<DELETED>'
+set folder           = 'imaps://imap.gmail.com/'
+set spoolfile        = 'imaps://imap.gmail.com/INBOX'
+set postponed        = 'imaps://imap.gmail.com/[Gmail]/Drafts'
+set header_cache     = '~/.mutt/cache/headers'
+set message_cachedir = '~/.mutt/cache/bodies'
+set certificate_file = '~/.mutt/certificates'
+set smtp_url         = 'smtp://<DELETED>@smtp.gmail.com:587'
+set smtp_pass        = $my_password
+set move             = no
+set imap_keepalive   = 900
+
+# Sort newest first
+set sort             = reverse-date-received
+
+# Get new mails every keystroke, but not more often than every 5 seconds and
+# "press" a key automatically every 60 seconds while idle.
+set timeout          = 60
+set mail_check       = 5
+set beep_new         = yes
+
+# Open HTML in (e)links-browser
+set mailcap_path     = '~/.mutt/mailcap'
+auto_view text/html
+
+# Encoding
+set send_charset     = 'utf-8'
+
+# Editor should work with session-management
+set editor           = 'vim -c "tabnew %"'
+
+# Colorscheme
+source ~/.mutt/vombatidae.mutt
+
