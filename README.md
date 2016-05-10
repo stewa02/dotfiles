@@ -1,5 +1,7 @@
 # Dotfiles of stewa02
+
 ## Contents
+
 Repository for all my configuration files. Currently configuration for following
 software is included:
 
@@ -13,6 +15,16 @@ software is included:
    currently being played in Banshee (documentation in shell script).
 
 ## Usage
+
 This repository is mainly for me to make the set up of a new system a little bit
 easier and to sync configurations across systems more easily.
+
+## Installation Scripts
+
+I would like to automate the installation with a little bash script, but it is
+not working currently.
+
+## TODO
+
+ * Complete and test installation script
 
