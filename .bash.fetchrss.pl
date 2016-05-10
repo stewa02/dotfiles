@@ -123,8 +123,8 @@ sub GetTemp {
 }
 
 my %settings = GetConfig();
-my $ping = qx/ping -c 1 8.8.8.8/;
-if ($ping =~ /unreachable/) {
+my $ping = qx/ping -c 1 8.8.8.8 2>&1/;
+unless ($ping =~ m/unreachable/) {
     my @feed = GetFeed($settings{"URL"}, $settings{"Count"});
     GenerateOutput($settings{"Count"}, $settings{"Name"}, $settings{"WWW"}, @feed);
 }
