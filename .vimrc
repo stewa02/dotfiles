@@ -7,12 +7,9 @@ set icon                                " Icon im Grafik-Terminal
 
 " Lightline
 let g:lightline = {
-    \ 'colorscheme': 'seoul256',
+    \ 'colorscheme': 'wombat',
     \ }
 "export TERM=xterm-256color
-"if !has('gui_running')
-"    set t_Co=256
-"endif
 
 " Colorscheme madness for crossplatform support
 if has("win32")
@@ -23,14 +20,11 @@ if has("win32")
     endif
 else
     set t_Co=256
-    "colorscheme buddy 
-    "colorscheme torte
     colorscheme wombat256
     "colorscheme jellybeans
     "let g:jellybeans_use_lowcolor_black = 0
     "let g:jellybeans_use_term_italics = 1
 endif
-"syntax on
 filetype on                             " Erkennen von Filetypen
 filetype indent on
 filetype plugin on
@@ -264,7 +258,6 @@ if has("win32")
     autocmd!
     autocmd InsertEnter * :set norelativenumber
     autocmd InsertLeave * :set relativenumber
-    "autocmd VimEnter * :set relativenumber
     augroup END
 endif
 " Indent with < and >
@@ -293,20 +286,16 @@ nmap <F8> :call ConnFTP()<CR>
 
 " LaTEX
 source ~/texcompile.vim
-augroup latex
+augroup latex_and_plaintext
     autocmd!
     autocmd FileType tex nmap <F5> :TEXCompile<CR>
-    autocmd BufEnter *.txt setlocal nolist
-    autocmd BufEnter *.tex setlocal nolist
-    autocmd BufEnter *.tex setlocal colorcolumn=
-    autocmd BufEnter *.txt setlocal colorcolumn=
-    autocmd BufEnter *.log setlocal colorcolumn=
+    autocmd BufEnter,BufNewFile,BufRead *.txt,*.tex,mutt*,*.log setlocal nolist
+    autocmd BufEnter,BufNewFile,BufRead *.txt,*.tex,mutt*,*.log setlocal colorcolumn=
 augroup END
 if has("win32") && has("gui_running")
     " Patch font
     set guifont=DejaVu\ Sans\ Mono
     " Replace LaTeX commands with unicode symbols
-    " set conceal
     set conceallevel=2
     set concealcursor=nvc
     hi Conceal guibg=NONE guifg=white
@@ -314,7 +303,6 @@ if has("win32") && has("gui_running")
 endif
 if !has("win32")
     " Replace LaTeX commands with unicode symbols
-    " set conceal
     set conceallevel=2
     set concealcursor=nvc
     hi Conceal guibg=NONE guifg=white ctermbg=NONE ctermfg=white
