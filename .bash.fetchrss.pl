@@ -63,11 +63,6 @@ sub GetConfig {
     return %conf;
 }
 
-sub GetOnlineStatus {
-    my $ping = qx/ping -c 1 8.8.8.8/;
-    return 0 if $ping =~ /unreachable/;
-}
-
 sub GetFeed {
     my $url = shift;
     my $xml = get($url);
@@ -128,7 +123,8 @@ sub GetTemp {
 }
 
 my %settings = GetConfig();
-if (GetOnlineStatus()) {
+my $ping = qx/ping -c 1 8.8.8.8/;
+if ($ping =~ /unreachable/) {
     my @feed = GetFeed($settings{"URL"}, $settings{"Count"});
     GenerateOutput($settings{"Count"}, $settings{"Name"}, $settings{"WWW"}, @feed);
 }
