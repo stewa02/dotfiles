@@ -4,8 +4,8 @@ use strict;
 use warnings;
 
 use LWP::Simple;
-use XML::RSS::Parser::Lite;
 use Config::IniFiles;
+use XML::RSS;
 
 =pod
 
@@ -66,16 +66,15 @@ sub GetConfig {
 sub GetFeed {
     my $url = shift;
     my $xml = get($url);
-    my $rp = new XML::RSS::Parser::Lite;
-    $rp->parse($xml);
+    my $rss = XML::RSS->new;
+    $rss->parse($xml);
     
     my $count = shift;
-    $count = $rp->count() if $count > $rp->count();
+    $count = $#{$rss->{'items'}} if $count > $#{$rss->{'items'}};
 
     my @feed;
     for (my $i = 0; $i < $count; $i++) {
-        my $entry = $rp->get($i);
-        push(@feed, $entry->get('title'));
+       push @feed, @{$rss->{'items'}}[$i]->{'title'};
     }
 
     return @feed;
