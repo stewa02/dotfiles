@@ -129,3 +129,8 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+# Add Perl 6 and emacs to $PATH
+PATH="$PATH:/opt/rakudo-star-2016.04/bin/"
+PATH="$PATH:$HOME/emacs/emacs/src/"
+
