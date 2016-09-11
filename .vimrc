@@ -122,12 +122,14 @@ set foldmethod=indent                   " Folding
 set foldenable
 set foldlevelstart=10
 set foldnestmax=3
+let mapleader="\<Space>"
+
 " Mappings fuer Tabpages
 nmap <F4> :tabn<CR>
 nmap <F3> :tabp<CR>
 nmap <C-e> :tabnew<CR>:Explore<CR>      " Fileexplorer
-nnoremap <F2> zi                        " Mappings fuer Folding
-nnoremap <F1> za
+"nnoremap <F2> zi                        " Mappings fuer Folding
+nnoremap <leader>f za
 set omnifunc=syntaxcomplete#Complete    " Autokomplettierung basierend auf Sp.
 nnoremap <C-J> <C-W><C-J>               " Splits
 nnoremap <C-K> <C-W><C-K>
@@ -168,15 +170,14 @@ set spelllang=de                        " Rechtschreibpruefung auf DE
 set spellsuggest=double,10              " Art und Anzahl Vorschlaege
 
 " Perl
-source ~/perltools.vim
 set comments=sl:#,mb:#,elx:#            " Autocomment fuer Perl etc.
 augroup perl
     autocmd!
     autocmd FileType perl set keywordprg=perldoc\ -f                    " Perldoc wenn K ueber Keyword
     autocmd FileType perl noremap K :!perldoc -f <cword> <bar><bar> perldoc <cword><cr>
     autocmd FileType perl set makeprg=perl\ -c\ %\ $*                   " Perl Syntaxcheck wenn :make
-    autocmd FileType perl nmap <F5>  :PerlRunScript<CR>                 " Mappings fuer direktes ausfuehren
-    autocmd FileType perl nmap <C-t> :PerlRunTests<CR>                  " Mappings fuer Tests
+    "autocmd FileType perl nmap <F5>  :PerlRunScript<CR>                 " Mappings fuer direktes ausfuehren
+    "autocmd FileType perl nmap <C-t> :PerlRunTests<CR>                  " Mappings fuer Tests
     autocmd FileType perl nmap <C-c> :w<CR>:make<CR>                    " Mappings fuer Syntaxcheck
     au BufNewFile,BufRead *.pl  setf perl   " Highlighting GVIM
     au BufNewFile,BufRead *.pm  setf perl
@@ -285,10 +286,9 @@ endfunction
 nmap <F8> :call ConnFTP()<CR>
 
 " LaTEX
-source ~/texcompile.vim
 augroup latex_and_plaintext
     autocmd!
-    autocmd FileType tex nmap <F5> :TEXCompile<CR>
+    "autocmd FileType tex nmap <F5> :TEXCompile<CR>
     autocmd BufEnter,BufNewFile,BufRead *.txt,*.tex,mutt*,*.log setlocal nolist
     autocmd BufEnter,BufNewFile,BufRead *.txt,*.tex,mutt*,*.log setlocal colorcolumn=
 augroup END
@@ -312,6 +312,16 @@ endif
 " Markdown
 augroup markdown
     autocmd!
-    autocmd BufNewFile,BufRead *.md setf markdown
+    autocmd BufNewFile,BufRead,BufEnter *.md setf markdown
 augroup END
+
+" texcompile conf
+if has("win32")
+    let g:tex_readerpath = 
+        \'C:\Program Files (x86)\Adobe\Acrobat Reader DC\Reader\AcroRd32.exe'
+    let g:tex_readerproc = 'AcroRd32.exe'
+else
+    let g:tex_readerpath = 'evince'
+    let g:tex_readerproc = 'evince'
+endif
 
