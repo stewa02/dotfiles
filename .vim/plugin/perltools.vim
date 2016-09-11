@@ -41,7 +41,10 @@ endfunction
 
 " Runs a Perl script
 function! s:RunPerlProgram()
-    execute ":w"
+    " Write file before execution
+    write
+
+    " Run Perl script after writing to disk
     execute ':!perl "'.expand("%:p").'"'
     if !has("gui_running")
         if has("win32")
