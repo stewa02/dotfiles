@@ -74,8 +74,8 @@ endif
 " Create mapping if there is no user defined one
 if !hasmapto(":TEXCompile")
     augroup texcompile_mappings
-        autocmd!
-        autocmd FileType tex nnoremap <unique> <leader>r :TEXCompile<CR>
+    autocmd!
+    autocmd FileType tex nnoremap <leader>r :TEXCompile<CR>
     augroup END
 endif
 

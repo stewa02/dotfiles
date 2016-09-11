@@ -14,11 +14,16 @@ let g:loaded_perltools = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! RunTestsPerl()
+" Runs tests from a test directory for Perl modules
+function! s:RunTestsPerl()
+    " Change directory to directory of script and search for test directory
+    " recursively upwards
     lcd %:p:h
     while empty(glob("t"))
         lcd ..
     endwhile
+
+    " If a valid directory is found, run the tests using prove
     if isdirectory("t")
         lcd t
         execute ':!prove -I"'.expand("%:p:h").'" *.t'
@@ -34,7 +39,8 @@ function! RunTestsPerl()
     endif
 endfunction
 
-function! RunPerlProgram()
+" Runs a Perl script
+function! s:RunPerlProgram()
     execute ":w"
     execute ':!perl "'.expand("%:p").'"'
     if !has("gui_running")
@@ -46,7 +52,7 @@ function! RunPerlProgram()
     endif
 endfunction
 
-function! PerlGetDoc(...)
+function! s:PerlGetDoc(...)
     if exists(a:0)
         let helpinput = a:0
     else
@@ -57,23 +63,23 @@ endfunction
 
 " Create command if it doesn't exist
 if !exists(":PerlRunTests")
-    command! PerlRunTests :call RunTestsPerl()
+    command! PerlRunTests :call <SID>RunTestsPerl()
 endif
 if !exists(":PerlRunScript")
-    command! PerlRunScript :call RunPerlProgram()
+    command! PerlRunScript :call <SID>RunPerlProgram()
 endif
 if !exists(":PerlGetDoc")
-    command! PerlGetDoc :call PerlGetDoc()
+    command! PerlGetDoc :call <SID>PerlGetDoc()
 endif
 
 " Create mapping if there is no user defined one
 if !hasmapto(":PerlRunTests") && !hasmapto(":PerlRunScript")
             \ && !hasmapto(":PerlGetDoc")
     augroup perltools_mappings
-        autocmd!
-        autocmd FileType perl nnoremap <unique> <leader>r <Plug>PerlRunScript<CR>
-        autocmd FileType perl nnoremap <unique> <leader>t <Plug>PerlRunTests<CR>
-        autocmd FileType perl nnoremap <unique> <leader>d <Plug>PerlGetDoc<CR>
+    autocmd!
+    autocmd FileType perl nnoremap <leader>r :PerlRunScript<CR>
+    autocmd FileType perl nnoremap <leader>t :PerlRunTests<CR>
+    autocmd FileType perl nnoremap <leader>d :PerlGetDoc<CR>
     augroup END
 endif
 
