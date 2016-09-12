@@ -123,6 +123,9 @@ set foldenable
 set foldlevelstart=10
 set foldnestmax=3
 let mapleader="\<Space>"
+nnoremap <leader>q :q<CR>
+nnoremap <leader>w :w<CR>
+nnoremap <leader>e :tabnew<CR>:Explore<CR>
 
 " Mappings fuer Tabpages
 nmap <F4> :tabn<CR>
@@ -144,6 +147,7 @@ nnoremap <Left> <Nop>
 "nnoremap j gj
 "nnoremap k gk
 set expandtab
+nnoremap Y y$
 
 " Statusline
 set laststatus=2
@@ -173,13 +177,10 @@ set spellsuggest=double,10              " Art und Anzahl Vorschlaege
 set comments=sl:#,mb:#,elx:#            " Autocomment fuer Perl etc.
 augroup perl
     autocmd!
-    autocmd FileType perl set keywordprg=perldoc\ -f                    " Perldoc wenn K ueber Keyword
-    autocmd FileType perl noremap K :!perldoc -f <cword> <bar><bar> perldoc <cword><cr>
-    autocmd FileType perl set makeprg=perl\ -c\ %\ $*                   " Perl Syntaxcheck wenn :make
-    "autocmd FileType perl nmap <F5>  :PerlRunScript<CR>                 " Mappings fuer direktes ausfuehren
-    "autocmd FileType perl nmap <C-t> :PerlRunTests<CR>                  " Mappings fuer Tests
-    autocmd FileType perl nmap <C-c> :w<CR>:make<CR>                    " Mappings fuer Syntaxcheck
-    au BufNewFile,BufRead *.pl  setf perl   " Highlighting GVIM
+    autocmd FileType perl set keywordprg=perldoc\ -f   " Perldoc wenn K ueber Keyword
+    autocmd FileType perl set makeprg=perl\ -c\ %\ $*  " Perl Syntaxcheck wenn :make
+    autocmd FileType perl nmap <C-c> :w<CR>:make<CR>   " Mappings fuer Syntaxcheck
+    au BufNewFile,BufRead *.pl  setf perl              " Highlighting GVIM
     au BufNewFile,BufRead *.pm  setf perl
     au BufNewFile,BufRead *.t   setf perl
 augroup END
@@ -212,25 +213,6 @@ set printoptions=left:10pc,right:10pc,top:5pc,bottom:5pc,number:y
 "set viminfo=string
 set viminfo='1000,f1
 set sessionoptions+=unix,slash
-fu! SaveSess()
-    execute 'mksession! ~/vimcache/session.vim'
-endfunction
-
-fu! RestoreSess()
-execute 'so ~/vimcache/session.vim'
-"if bufexists(1)
-    "for l in range(1, bufnr('$'))
-        "if bufwinnr(l) == -1
-            "exec 'sbuffer ' . l
-        "endif
-    "endfor
-"endif
-endfunction
-augroup session
-    autocmd!
-    autocmd VimLeave * call SaveSess()
-    autocmd VimEnter * call RestoreSess()
-augroup END
 
 " Anderer Mist
 if empty(glob("~/vimcache"))
@@ -288,7 +270,6 @@ nmap <F8> :call ConnFTP()<CR>
 " LaTEX
 augroup latex_and_plaintext
     autocmd!
-    "autocmd FileType tex nmap <F5> :TEXCompile<CR>
     autocmd BufEnter,BufNewFile,BufRead *.txt,*.tex,mutt*,*.log setlocal nolist
     autocmd BufEnter,BufNewFile,BufRead *.txt,*.tex,mutt*,*.log setlocal colorcolumn=
 augroup END

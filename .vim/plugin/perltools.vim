@@ -56,12 +56,12 @@ function! s:RunPerlProgram()
 endfunction
 
 function! s:PerlGetDoc(...)
-    if exists(a:0)
-        let helpinput = a:0
+    if exists("a:1")
+        let helpinput = a:1
     else
         let helpinput = input("Perldoc help entry: ")
     endif
-    call system("perldoc -f ".helpinput) || system("perldoc ".helpinput)
+    call system("perldoc -f ".helpinput." || perldoc ".helpinput)
 endfunction
 
 " Create command if it doesn't exist
