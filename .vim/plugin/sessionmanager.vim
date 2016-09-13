@@ -8,7 +8,7 @@
 "                https://groups.google.com/forum/#!topic/vim_use/0jaFyy5LR7A
 
 " Do not load, if loaded already
-if exists("g:loaded_sessionmanager") || v:version < 730
+if exists("g:loaded_sessionmanager") || v:version < 703
     finish
 endif
 let g:loaded_sessionmanager = 1
@@ -28,8 +28,8 @@ set sessionoptions+=unix,slash
 " if you are in the corresponding tab.
 " Reference: https://groups.google.com/forum/#!topic/vim_use/0jaFyy5LR7A
 function! s:BufInTab(bufnr) 
-    for tabnr in range(1,tabpagenr("$")) 
-        if index(tabpagebuflist(tabnr), a:bufnr) != -1 
+    for s:tabnr in range(1,tabpagenr("$")) 
+        if index(tabpagebuflist(s:tabnr), a:bufnr) != -1 
             return 0 
         endif 
     endfor 
@@ -37,7 +37,7 @@ function! s:BufInTab(bufnr)
 endfunction 
 
 " Simply saves the current session into the personal .vim directory
-function! SaveSess()
+function! s:SaveSess()
     if has("win32") || has("win16")
         execute "mksession! ~/vimfiles/session.vim"
     elseif has("unix") || has("linux") || has("mac") || has("macunix")
@@ -50,7 +50,7 @@ endfunction
 " Simply loads in the saved session. Is called by a autocommand at VimEnter.
 " The magic after the source command is necessary to open all new files with
 " which vim was called from the command line.
-function! RestoreSess()
+function! s:RestoreSess()
     if has("win32") || has("win16")
         execute "source ~/vimfiles/session.vim"
     elseif has("unix") || has("linux") || has("mac") || has("macunix")
@@ -60,20 +60,28 @@ function! RestoreSess()
         return
     endif
     if bufexists(1)
-        for bufnr in range(1, bufnr("$"))
-            if s:BufInTab(bufnr)
+        for s:bufnr in range(1, bufnr("$"))
+            if s:BufInTab(s:bufnr)
                 tabnew
-                execute ":b".bufnr
+                execute ":b".s:bufnr
             endif
         endfor
     endif
 endfunction
 
+" Create command if they don't exist
+if !exists(":SaveSession") && !exists(":RestoreSession")
+    command! SaveSession    :call <SID>SaveSess()
+    command! RestoreSession :call <SID>RestoreSess()
+else
+    echoerr "No command created, because they already exists!"
+endif
+
 " Set up autocommands for autosave and autoload
 augroup session
 autocmd!
-autocmd VimLeave * call SaveSess()
-autocmd VimEnter * call RestoreSess()
+autocmd VimLeave * :SaveSession
+autocmd VimEnter * :RestoreSession
 augroup END
 
 " Restore user settings
