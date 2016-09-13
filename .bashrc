@@ -116,8 +116,9 @@ alias ping='ping -c 4'
 # Open tmx with 256 colour support
 alias tmux='tmux -2'
 
-# Open new files in new tabs
-alias vim='vim -c "tabnew %"'
+# Open new files in new tabs. This is not necessary anymore the bug that this 
+# alias solved is now fixed in sessionmanager.vim
+#alias vim='vim -c "tabnew %"'
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile

@@ -32,9 +32,9 @@ syntax enable
 
 " Auto reload .vimrc/_vimrc
 augroup Reload
-    autocmd!
-    autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
-    autocmd BufWritePost $MYVIMRC nested call lightline#update()
+autocmd!
+autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
+autocmd BufWritePost $MYVIMRC nested call lightline#update()
 augroup END
 
 set wrap                                " Lange Zeilen am Ende umbrechen
@@ -122,10 +122,13 @@ set foldmethod=indent                   " Folding
 set foldenable
 set foldlevelstart=10
 set foldnestmax=3
+
+" Leader mappings
 let mapleader="\<Space>"
 nnoremap <leader>q :q<CR>
 nnoremap <leader>w :w<CR>
 nnoremap <leader>e :tabnew<CR>:Explore<CR>
+nnoremap <leader>n :set nohl<CR>
 
 " Mappings fuer Tabpages
 nmap <F4> :tabn<CR>
@@ -176,13 +179,13 @@ set spellsuggest=double,10              " Art und Anzahl Vorschlaege
 " Perl
 set comments=sl:#,mb:#,elx:#            " Autocomment fuer Perl etc.
 augroup perl
-    autocmd!
-    autocmd FileType perl set keywordprg=perldoc\ -f   " Perldoc wenn K ueber Keyword
-    autocmd FileType perl set makeprg=perl\ -c\ %\ $*  " Perl Syntaxcheck wenn :make
-    autocmd FileType perl nmap <C-c> :w<CR>:make<CR>   " Mappings fuer Syntaxcheck
-    au BufNewFile,BufRead *.pl  setf perl              " Highlighting GVIM
-    au BufNewFile,BufRead *.pm  setf perl
-    au BufNewFile,BufRead *.t   setf perl
+autocmd!
+autocmd FileType perl set keywordprg=perldoc\ -f   " Perldoc wenn K ueber Keyword
+autocmd FileType perl set makeprg=perl\ -c\ %\ $*  " Perl Syntaxcheck wenn :make
+autocmd FileType perl nmap <C-c> :w<CR>:make<CR>   " Mappings fuer Syntaxcheck
+autocmd BufNewFile,BufRead *.pl  setf perl         " Highlighting GVIM
+autocmd BufNewFile,BufRead *.pm  setf perl
+autocmd BufNewFile,BufRead *.t   setf perl
 augroup END
 let perl_include_pod = 1                " Plain Old Documentation
 let perl_extended_vars = 1              " Komplexe Variablenstrukturen
@@ -191,12 +194,12 @@ let perl_fold_blocks = 1
 
 " Python
 augroup python
-    autocmd!
-    au BufNewFile,BufRead *.py  setf python         " Highlighting GVIM
-    au FileType py set textwidth=79                 " PEP-8 (Max-Breite)
-    au BufNewFile,BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
-    au BufNewFile,BufRead *.py set nocindent        " Einruecken nach PY-Default
-    autocmd FileType python nmap <F5> :w<CR>:!python %<CR>:!pause<CR>" Mappings fuer direktes ausfuehren
+autocmd!
+autocmd BufNewFile,BufRead *.py  setf python         " Highlighting GVIM
+autocmd FileType py set textwidth=79                 " PEP-8 (Max-Breite)
+autocmd BufNewFile,BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+autocmd BufNewFile,BufRead *.py set nocindent        " Einruecken nach PY-Default
+autocmd FileType python nmap <F5> :w<CR>:!python %<CR>:!pause<CR>" Mappings fuer direktes ausfuehren
 augroup END
 
 " Schreibfehler abfangen
@@ -209,32 +212,29 @@ command! Q q
 set printheader=%<%F%=Seite\ %N
 set printoptions=left:10pc,right:10pc,top:5pc,bottom:5pc,number:y
 
-" Session-Management
+" Security
 "set viminfo=string
 set viminfo='1000,f1
 set sessionoptions+=unix,slash
+set backup
+"set backupskip=/tmp/*
+set backupdir=~/.vim/cache                " Backupdir
+set directory=~/.vim/cache                " Swapfiles
+set writebackup
+if has('persistent_undo')
+    set undodir=~/.vim/cache              " Undodir
+    set undofile
+endif
 
 " Anderer Mist
-if empty(glob("~/vimcache"))
-    silent call mkdir("~/vimcache")
-endif
 let cobol_legacy_code=1
 "autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 "backspace=start,indent,eol
 "au BufNew * setlocal linebreak
 inoremap <Down> <C-o>gj
 inoremap <Up> <C-o>gk
-set backup
-"set backupskip=/tmp/*
-set backupdir=~/vimcache                " Backupdir
-set directory=~/vimcache                " Swapfiles
-set writebackup
 set lazyredraw
 set copyindent
-if has('persistent_undo')
-    set undodir=~/vimcache              " Undodir
-    set undofile
-endif
 nnoremap Q <Nop>                        " Ex Mode deaktiviert
 if has("win32")
     augroup numbering
