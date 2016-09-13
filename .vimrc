@@ -20,7 +20,8 @@ if has("win32")
     endif
 else
     set t_Co=256
-    colorscheme wombat256
+    "colorscheme wombat256
+    colorscheme buddy
     "colorscheme jellybeans
     "let g:jellybeans_use_lowcolor_black = 0
     "let g:jellybeans_use_term_italics = 1
@@ -218,11 +219,22 @@ set viminfo='1000,f1
 set sessionoptions+=unix,slash
 set backup
 "set backupskip=/tmp/*
-set backupdir=~/.vim/cache                " Backupdir
-set directory=~/.vim/cache                " Swapfiles
+" backup and swapdirectory
+if has("win32") || has("win16")
+    set backupdir=~/vimfiles/cache
+    set directory=~/vimfiles/cache
+elseif has("unix") || has("linux") || has("mac") || has("macunix")
+    set backupdir=~/.vim/cache
+    set directory=~/.vim/cache
+endif
 set writebackup
 if has('persistent_undo')
-    set undodir=~/.vim/cache              " Undodir
+    " undo directory
+    if has("win32") || has("win16")
+        set undodir=~/vimfiles/cache
+    elseif has("unix") || has("linux") || has("mac") || has("macunix")
+        set undodir=~/.vim/cache
+    endif
     set undofile
 endif
 
