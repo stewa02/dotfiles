@@ -22,9 +22,6 @@ else
     set t_Co=256
     "colorscheme wombat256
     colorscheme buddy
-    "colorscheme jellybeans
-    "let g:jellybeans_use_lowcolor_black = 0
-    "let g:jellybeans_use_term_italics = 1
 endif
 filetype on                             " Erkennen von Filetypen
 filetype indent on
@@ -248,7 +245,7 @@ inoremap <Up> <C-o>gk
 set lazyredraw
 set copyindent
 nnoremap Q <Nop>                        " Ex Mode deaktiviert
-if has("win32")
+if has("win32") || v:version >= 800
     augroup numbering
     autocmd!
     autocmd InsertEnter * :set norelativenumber
@@ -281,31 +278,24 @@ nmap <F8> :call ConnFTP()<CR>
 
 " LaTEX
 augroup latex_and_plaintext
-    autocmd!
-    autocmd BufEnter,BufNewFile,BufRead *.txt,*.tex,mutt*,*.log setlocal nolist
-    autocmd BufEnter,BufNewFile,BufRead *.txt,*.tex,mutt*,*.log setlocal colorcolumn=
+autocmd!
+autocmd BufEnter,BufNewFile,BufRead *.txt,*.tex,mutt*,*.log setlocal nolist
+autocmd BufEnter,BufNewFile,BufRead *.txt,*.tex,mutt*,*.log setlocal colorcolumn=
 augroup END
+" Replace LaTeX commands with unicode symbols
+set conceallevel=2
+set concealcursor=nvc
+hi Conceal guibg=NONE guifg=white ctermbg=NONE ctermfg=white
+let g:tex_conceal="adgms"
+" Patch font on MS Windows
 if has("win32") && has("gui_running")
-    " Patch font
     set guifont=DejaVu\ Sans\ Mono
-    " Replace LaTeX commands with unicode symbols
-    set conceallevel=2
-    set concealcursor=nvc
-    hi Conceal guibg=NONE guifg=white
-    let g:tex_conceal="adgms"
-endif
-if !has("win32")
-    " Replace LaTeX commands with unicode symbols
-    set conceallevel=2
-    set concealcursor=nvc
-    hi Conceal guibg=NONE guifg=white ctermbg=NONE ctermfg=white
-    let g:tex_conceal="adgms"
 endif
 
 " Markdown
 augroup markdown
-    autocmd!
-    autocmd BufNewFile,BufRead,BufEnter *.md setf markdown
+autocmd!
+autocmd BufNewFile,BufRead,BufEnter *.md setf markdown
 augroup END
 
 " texcompile conf
@@ -316,5 +306,10 @@ if has("win32")
 else
     let g:tex_readerpath = 'evince'
     let g:tex_readerproc = 'evince'
+endif
+
+" Breakindent for versions 8 and above
+if v:version >= 800
+    set breakindent
 endif
 
