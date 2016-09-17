@@ -11,18 +11,11 @@ let g:lightline = {
     \ }
 "export TERM=xterm-256color
 
-" Colorscheme madness for crossplatform support
-if has("win32")
-    if has("gui_running")
-        colorscheme buddy
-    else
-        colorscheme desert
-    endif
-else
-    set t_Co=256
-    "colorscheme wombat256
-    colorscheme buddy
-endif
+" Colorscheme
+set t_Co=256
+"colorscheme wombat256
+colorscheme buddy
+
 filetype on                             " Erkennen von Filetypen
 filetype indent on
 filetype plugin on
@@ -55,8 +48,6 @@ set guioptions-=T                       " remove toolbar
 set guioptions-=r                       " remove right-hand scroll bar
 set guioptions-=L                       " remove left-hand scroll bar
 set mousehide                           " Maus waehrend schreiben ausbl.
-"set background=dark                     " Hintergrund dunkel
-"set columns=85                         " Maximale Spaltenbreite
 set autowrite                           " Speichern vor :next and :make
 set hidden                              " Buffer verstecken wenn nicht benoetigt
 if has("gui_running")
@@ -76,16 +67,9 @@ set listchars=tab:\|\
 set ch=1                                " VIM Commandline 1 Zeile
 set complete-=i                         " disable includes for autocomplete
 set completeopt=longest,menuone
-" Enter key for completion selection
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" map omnicomp to jump to prev location
-inoremap <C-o> <C-x><C-o>
-" mappings for navigation in popup menu
-inoremap <expr> <C-j>     pumvisible() ? "\<C-n>" : "\<C-j>"
-inoremap <expr> <C-k>       pumvisible() ? "\<C-p>" : "\<C-k>"
 
-if has("gui_running")                   " GUI-Optionen
-    set lines=999 columns=999           " Fullscreen
+if has("gui_running")
+    set lines=999 columns=999           " keep GVim in fullscreen
     if has("win32")
         au GUIEnter * simalt ~x
     endif
@@ -99,9 +83,7 @@ set history=999                         " 999 Befehlshistoryeintraege
 
 " Steuerung
 set nocp                                " Kein Kompartibilitaetsmodus
-if has("mouse")
-    set mouse=a                         " Maus aktivieren
-endif
+set mouse=a                             " Maus aktivieren
 set ruler                               " Position des Zeigers anzeigen
 set clipboard=unnamed                   " Systemzwischenablage
 set backspace=2                         " Loeschen ueber Zeilenende
@@ -120,22 +102,28 @@ set foldmethod=indent                   " Folding
 set foldenable
 set foldlevelstart=10
 set foldnestmax=3
+set expandtab
+set omnifunc=syntaxcomplete#Complete    " Autokomplettierung basierend auf Sp.
+set lazyredraw
+set copyindent
+if v:version >= 800
+    set breakindent                     " Breakindent for versions 8 and above
+endif
+
 
 " Leader mappings
 let mapleader="\<Space>"
 nnoremap <leader>q :q<CR>
 nnoremap <leader>w :w<CR>
 nnoremap <leader>e :tabnew<CR>:Explore<CR>
-nnoremap <leader>n :set nohl<CR>
-
-" Mappings fuer Tabpages
-nmap <F4> :tabn<CR>
-nmap <F3> :tabp<CR>
-nmap <C-e> :tabnew<CR>:Explore<CR>      " Fileexplorer
-"nnoremap <F2> zi                        " Mappings fuer Folding
+nnoremap <leader>n :nohl<CR>
+" Toggle folding
 nnoremap <leader>f za
-set omnifunc=syntaxcomplete#Complete    " Autokomplettierung basierend auf Sp.
-nnoremap <C-J> <C-W><C-J>               " Splits
+" Mappings for tabpages
+nnoremap <F4> :tabn<CR>
+nnoremap <F3> :tabp<CR>
+" Mappings for movement between splits
+nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
@@ -145,10 +133,44 @@ nnoremap <Down> <Nop>
 nnoremap <Right> <Nop>
 nnoremap <Left> <Nop>
 " Use visual lines for movement
-"nnoremap j gj
-"nnoremap k gk
-set expandtab
+nnoremap j gj
+nnoremap k gk
+" make Y behave like D and C
 nnoremap Y y$
+"inoremap <Down> <C-o>gj
+"inoremap <Up> <C-o>gk
+inoremap <Up> <Nop>
+inoremap <Down> <Nop>
+inoremap <Right> <Nop>
+inoremap <Left> <Nop>
+" Use very-magic mode in regexes (Perl-like)
+"nnoremap / /\v
+"vnoremap / /\v
+nnoremap Q <Nop>
+" Indent with < and >
+vnoremap < <gv
+vnoremap > >gv
+" Enter key for completion selection
+inoremap <expr> <CR>  pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" map omnicomp to jump to prev location
+inoremap <C-o> <C-x><C-o>
+" mappings for navigation in popup menu
+inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
+inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
+" Don't jump to next match with * operator
+nnoremap * *<C-o>
+
+" don't rage at me for typos
+command! WQ wq
+command! Wq wq
+command! W w
+command! Q q
+
+" Keep splits evenly sized when window is resized (particularly in GVim)
+augroup Resize
+autocmd!
+autocmd VimResized * :wincmd =
+augroup END
 
 " Statusline
 set laststatus=2
@@ -157,18 +179,18 @@ hi User2 guifg=#dd3333 guibg=#222222
 hi User3 guifg=#ff66ff guibg=#222222
 hi User4 guifg=#a0ee40 guibg=#222222
 hi User5 guifg=#eeee40 guibg=#222222
-set statusline=
-set statusline +=%1*\ %n\ %*            "buffer number
-set statusline +=%5*%{&ff}%*            "file format
-set statusline +=%3*%y%*                "file type
-set statusline +=%4*\ %<%F%*            "full path
-set statusline +=%2*%m%*                "modified flag
-set statusline +=%1*%=%5l%*             "current line
-set statusline +=%2*/%L%*               "total lines
-set statusline +=%1*%4v\ %*             "virtual column number
-set statusline +=%2*0x%04B\ %*          "character under cursor
+set statusline =
+set statusline +=%1*\ %n\ %*            " buffer number
+set statusline +=%5*%{&ff}%*            " file format
+set statusline +=%3*%y%*                " file type
+set statusline +=%4*\ %<%F%*            " full path
+set statusline +=%2*%m%*                " modified flag
+set statusline +=%1*%=%5l%*             " current line
+set statusline +=%2*/%L%*               " total lines
+set statusline +=%1*%4v\ %*             " virtual column number
+set statusline +=%2*0x%04B\ %*          " character under cursor
 
-" Lokalisierung
+" Locale
 set encoding=utf-8                      " Vim auf UTF-8
 setglobal fileencoding=utf-8            " Mit Vim erstellte Files auf UTF-8
 set spelllang=de                        " Rechtschreibpruefung auf DE
@@ -200,81 +222,11 @@ autocmd BufNewFile,BufRead *.py set nocindent        " Einruecken nach PY-Defaul
 autocmd FileType python nmap <F5> :w<CR>:!python %<CR>:!pause<CR>" Mappings fuer direktes ausfuehren
 augroup END
 
-" Schreibfehler abfangen
-command! WQ wq
-command! Wq wq
-command! W w
-command! Q q
-
-" Drucker
-set printheader=%<%F%=Seite\ %N
-set printoptions=left:10pc,right:10pc,top:5pc,bottom:5pc,number:y
-
-" Security
-"set viminfo=string
-set viminfo='1000,f1
-set sessionoptions+=unix,slash
-set backup
-"set backupskip=/tmp/*
-" backup and swapdirectory
-if has("win32") || has("win16")
-    set backupdir=~/vimfiles/cache
-    set directory=~/vimfiles/cache
-elseif has("unix") || has("linux") || has("mac") || has("macunix")
-    set backupdir=~/.vim/cache
-    set directory=~/.vim/cache
-endif
-set writebackup
-if has('persistent_undo')
-    " undo directory
-    if has("win32") || has("win16")
-        set undodir=~/vimfiles/cache
-    elseif has("unix") || has("linux") || has("mac") || has("macunix")
-        set undodir=~/.vim/cache
-    endif
-    set undofile
-endif
-
-" Anderer Mist
-let cobol_legacy_code=1
-"autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-"backspace=start,indent,eol
-"au BufNew * setlocal linebreak
-inoremap <Down> <C-o>gj
-inoremap <Up> <C-o>gk
-set lazyredraw
-set copyindent
-nnoremap Q <Nop>                        " Ex Mode deaktiviert
-if has("win32") || v:version >= 800
-    augroup numbering
-    autocmd!
-    autocmd InsertEnter * :set norelativenumber
-    autocmd InsertLeave * :set relativenumber
-    augroup END
-endif
-" Indent with < and >
-vnoremap < <gv
-vnoremap > >gv
-
-" Colorizer
-"let g:colorizer_fgcontrast = -1
-let g:colorizer_nomap = 1
-"ColorHighlight ColorClear and ColorToggle
-if has("gui_running")
-    augroup colorizer
-    autocmd!
-    autocmd VimEnter * ColorHighlight
-    augroup END
-endif
-
-" FTP
-fu! ConnFTP()
-    let ftp_user = '<>'
-    let ftp_host = '<>'
-    tabnew
-    edit 'ftp://'.ftp_user.'@'.ftp_host.'//'
-endfunction
-nmap <F8> :call ConnFTP()<CR>
+" Gnuplot files
+augroup gnuplot
+autocmd!
+autocmd BufNewFile,BufRead *.gp setlocal filetype gnuplot
+augroup END
 
 " LaTEX
 augroup latex_and_plaintext
@@ -291,13 +243,6 @@ let g:tex_conceal="adgms"
 if has("win32") && has("gui_running")
     set guifont=DejaVu\ Sans\ Mono
 endif
-
-" Markdown
-augroup markdown
-autocmd!
-autocmd BufNewFile,BufRead,BufEnter *.md setf markdown
-augroup END
-
 " texcompile conf
 if has("win32")
     let g:tex_readerpath = 
@@ -308,8 +253,63 @@ else
     let g:tex_readerproc = 'evince'
 endif
 
-" Breakindent for versions 8 and above
-if v:version >= 800
-    set breakindent
+" Markdown
+augroup markdown
+autocmd!
+autocmd BufNewFile,BufRead,BufEnter *.md setf markdown
+augroup END
+
+" Drucker
+set printheader=%<%F%=Seite\ %N
+set printoptions=left:10pc,right:10pc,top:5pc,bottom:5pc,number:y
+
+" Security
+set viminfo='1000,f1
+set sessionoptions+=unix,slash
+set backup
+" backup and swapdirectory
+if has("win32") || has("win16")
+    set backupdir=~/vimfiles/cache//
+    set directory=~/vimfiles/cache//
+elseif has("unix") || has("linux") || has("mac") || has("macunix")
+    set backupdir=~/.vim/cache//
+    set directory=~/.vim/cache//
+endif
+set writebackup
+if has('persistent_undo')
+    " undo directory
+    if has("win32") || has("win16")
+        set undodir=~/vimfiles/cache//
+    elseif has("unix") || has("linux") || has("mac") || has("macunix")
+        set undodir=~/.vim/cache//
+    endif
+    set undofile
+endif
+
+" Create backup directory, if it doesn't exists
+if !isdirectory(expand(&backupdir))
+    call mkdir(expand(&backupdir), "p")
+endif
+
+" Anderer Mist
+let cobol_legacy_code=1
+if has("win32") || v:version >= 800
+    augroup numbering
+    autocmd!
+    autocmd InsertEnter * :set norelativenumber
+    autocmd InsertLeave * :set relativenumber
+    augroup END
+endif
+" make netrw more pleasant without filling your entire HDD with NERDTree
+let g:netrw_liststyle=3
+
+" Colorizer
+let g:colorizer_nomap = 1
+"ColorHighlight ColorClear and ColorToggle
+if has("gui_running")
+    augroup colorizer
+    autocmd!
+    autocmd VimEnter * ColorHighlight
+    augroup END
 endif
 

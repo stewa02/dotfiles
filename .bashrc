@@ -120,6 +120,10 @@ alias tmux='tmux -2'
 # alias solved is now fixed in sessionmanager.vim
 #alias vim='vim -c "tabnew %"'
 
+# Small aliases for the source-compiled vim8
+alias vim8='/opt/bin/vim'
+alias gvim8='/opt/bin/gvim'
+
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
