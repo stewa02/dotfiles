@@ -1,14 +1,15 @@
 
 " VIMRC stewa02
 
+" basic configuration
+" {{{
+
 " Aussehen
 set number                              " Zeilennummern einblenden
 set icon                                " Icon im Grafik-Terminal
 
 " Lightline
-let g:lightline = {
-    \ 'colorscheme': 'wombat',
-    \ }
+let g:lightline = { 'colorscheme': 'wombat' }
 "export TERM=xterm-256color
 
 " Colorscheme
@@ -16,7 +17,8 @@ set t_Co=256
 "colorscheme wombat256
 colorscheme buddy
 
-filetype on                             " Erkennen von Filetypen
+" Erkennen von Filetypen
+filetype on
 filetype indent on
 filetype plugin on
 syntax enable
@@ -109,9 +111,11 @@ set copyindent
 if v:version >= 800
     set breakindent                     " Breakindent for versions 8 and above
 endif
+" }}}
 
 
-" Leader mappings
+" mappings
+" {{{
 let mapleader="\<Space>"
 nnoremap <leader>q :q<CR>
 nnoremap <leader>w :w<CR>
@@ -165,6 +169,7 @@ command! WQ wq
 command! Wq wq
 command! W w
 command! Q q
+" }}}
 
 " Keep splits evenly sized when window is resized (particularly in GVim)
 augroup Resize
@@ -173,6 +178,7 @@ autocmd VimResized * :wincmd =
 augroup END
 
 " Statusline
+" {{{
 set laststatus=2
 hi User1 guifg=#eea040 guibg=#222222
 hi User2 guifg=#dd3333 guibg=#222222
@@ -189,23 +195,26 @@ set statusline +=%1*%=%5l%*             " current line
 set statusline +=%2*/%L%*               " total lines
 set statusline +=%1*%4v\ %*             " virtual column number
 set statusline +=%2*0x%04B\ %*          " character under cursor
+" }}}
 
 " Locale
+" {{{
 set encoding=utf-8                      " Vim auf UTF-8
 setglobal fileencoding=utf-8            " Mit Vim erstellte Files auf UTF-8
 set spelllang=de                        " Rechtschreibpruefung auf DE
 set spellsuggest=double,10              " Art und Anzahl Vorschlaege
+" }}}
+
+" Filetype specific stuff
+" {{{
 
 " Perl
 set comments=sl:#,mb:#,elx:#            " Autocomment fuer Perl etc.
 augroup perl
 autocmd!
-autocmd FileType perl set keywordprg=perldoc\ -f   " Perldoc wenn K ueber Keyword
-autocmd FileType perl set makeprg=perl\ -c\ %\ $*  " Perl Syntaxcheck wenn :make
-autocmd FileType perl nmap <C-c> :w<CR>:make<CR>   " Mappings fuer Syntaxcheck
-autocmd BufNewFile,BufRead *.pl  setf perl         " Highlighting GVIM
-autocmd BufNewFile,BufRead *.pm  setf perl
-autocmd BufNewFile,BufRead *.t   setf perl
+autocmd FileType perl set keywordprg=perldoc\ -f     " Perldoc wenn K ueber Keyword
+autocmd FileType perl set makeprg=perl\ -c\ %\ $*    " Perl Syntaxcheck wenn :make
+autocmd BufNewFile,BufRead *.pl,*.pm,*.t  setlocal filetype perl 
 augroup END
 let perl_include_pod = 1                " Plain Old Documentation
 let perl_extended_vars = 1              " Komplexe Variablenstrukturen
@@ -215,11 +224,8 @@ let perl_fold_blocks = 1
 " Python
 augroup python
 autocmd!
-autocmd BufNewFile,BufRead *.py  setf python         " Highlighting GVIM
-autocmd FileType py set textwidth=79                 " PEP-8 (Max-Breite)
-autocmd BufNewFile,BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
-autocmd BufNewFile,BufRead *.py set nocindent        " Einruecken nach PY-Default
-autocmd FileType python nmap <F5> :w<CR>:!python %<CR>:!pause<CR>" Mappings fuer direktes ausfuehren
+autocmd BufNewFile,BufRead *.py  setlocal filetype python
+autocmd FileType python nmap <F5> :w<CR>:!python %<CR>:!pause<CR> 
 augroup END
 
 " Gnuplot files
@@ -258,12 +264,14 @@ augroup markdown
 autocmd!
 autocmd BufNewFile,BufRead,BufEnter *.md setf markdown
 augroup END
+" }}}
 
 " Drucker
 set printheader=%<%F%=Seite\ %N
 set printoptions=left:10pc,right:10pc,top:5pc,bottom:5pc,number:y
 
 " Security
+" {{{
 set viminfo='1000,f1
 set sessionoptions+=unix,slash
 set backup
@@ -290,14 +298,15 @@ endif
 if !isdirectory(expand(&backupdir))
     call mkdir(expand(&backupdir), "p")
 endif
+" }}}
 
 " Anderer Mist
 let cobol_legacy_code=1
 if has("win32") || v:version >= 800
     augroup numbering
     autocmd!
-    autocmd InsertEnter * :set norelativenumber
-    autocmd InsertLeave * :set relativenumber
+    autocmd InsertEnter * set norelativenumber
+    autocmd InsertLeave * set relativenumber
     augroup END
 endif
 " make netrw more pleasant without filling your entire HDD with NERDTree
@@ -305,7 +314,6 @@ let g:netrw_liststyle=3
 
 " Colorizer
 let g:colorizer_nomap = 1
-"ColorHighlight ColorClear and ColorToggle
 if has("gui_running")
     augroup colorizer
     autocmd!
@@ -313,3 +321,4 @@ if has("gui_running")
     augroup END
 endif
 
+" vim:foldmethod=marker
