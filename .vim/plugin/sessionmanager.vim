@@ -1,5 +1,5 @@
 " Small session management plugin.
-" Last change:   13.09.2016
+" Last change:   15.09.2016
 " Maintainer:    stewa02 <stewatwo@cpan.org>
 " License:       This plugin is distributed under the Vim-license.
 " Thanks to:     markw (stackoverflow):
@@ -13,8 +13,7 @@ if exists("g:loaded_sessionmanager") || v:version < 703
 endif
 let g:loaded_sessionmanager = 1
 
-" Save configuration and replace them with defaults
-" (line-continuation)
+" Save configuration and replace them with defaults (line-continuation)
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -22,6 +21,19 @@ set cpo&vim
 " systems that use the forward slash "/" instead of the backslash "\". This
 " option uses the forward slash on all systems inside the session files.
 set sessionoptions+=unix,slash
+
+" Creates a personal directory for your vim files. It creates the folder 
+" ~/.vim on *nix and ~/vimfiles on Microsoft Windows. 
+" Reference: http://vimdoc.sourceforge.net/htmldoc/options.html#vimfiles
+if has("win32") || has("win16")
+    if !isdirectory($HOME."/vimfiles")
+        call mkdir($HOME."/vimfiles", "p")
+    endif
+elseif has("unix") || has("linux") || has("mac") || has("macunix")
+    if !isdirectory($HOME."/.vim")
+        call mkdir($HOME."/.vim", "p")
+    endif
+endif
 
 " Function that determines if a certain buffer is active in any of the open
 " tabs. This is necessary, because bufwinnr() only returns the correct answer
@@ -51,28 +63,38 @@ endfunction
 " The magic after the source command is necessary to open all new files with
 " which vim was called from the command line.
 function! s:RestoreSess()
-    if has("win32") || has("win16")
-        execute "source ~/vimfiles/session.vim"
-    elseif has("unix") || has("linux") || has("mac") || has("macunix")
-        execute "source ~/.vim/session.vim"
+    if !empty(glob("~/.vim/session.vim")) || 
+                \ !empty(glob("~/vimfiles/session.vim"))
+        if has("win32") || has("win16")
+            execute "source ~/vimfiles/session.vim"
+        elseif has("unix") || has("linux") || has("mac") || has("macunix")
+            execute "source ~/.vim/session.vim"
+        else
+            echoerr "Operating system is not supported!"
+            return
+        endif
+        if bufexists(1)
+            for s:bufnr in range(1, bufnr("$"))
+                if s:BufInTab(s:bufnr)
+                    tabnew
+                    execute ":b".s:bufnr
+                endif
+            endfor
+        endif
     else
-        echoerr "Operating system is not supported!"
-        return
-    endif
-    if bufexists(1)
-        for s:bufnr in range(1, bufnr("$"))
-            if s:BufInTab(s:bufnr)
-                tabnew
-                execute ":b".s:bufnr
-            endif
-        endfor
+        " If there is no session file do nothing and inform the user using 
+        " ErrorMsg highlighting without requiring the user to press enter at
+        " startup (making the error less special).
+        echohl ErrorMsg
+        echomsg "No session file to load!"
+        echohl None
     endif
 endfunction
 
 " Create command if they don't exist
 if !exists(":SaveSession") && !exists(":RestoreSession")
-    command! SaveSession    :call <SID>SaveSess()
-    command! RestoreSession :call <SID>RestoreSess()
+    command! SaveSession    call <SID>SaveSess()
+    command! RestoreSession call <SID>RestoreSess()
 else
     echoerr "No command created, because they already exists!"
 endif
@@ -80,8 +102,8 @@ endif
 " Set up autocommands for autosave and autoload
 augroup session
 autocmd!
-autocmd VimLeave * :SaveSession
-autocmd VimEnter * :RestoreSession
+autocmd VimLeave * SaveSession
+autocmd VimEnter * RestoreSession
 augroup END
 
 " Restore user settings

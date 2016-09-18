@@ -111,6 +111,8 @@ set copyindent
 if v:version >= 800
     set breakindent                     " Breakindent for versions 8 and above
 endif
+set splitright                          " Put new splits where they belong
+set splitbelow
 " }}}
 
 
