@@ -4,18 +4,12 @@
 " basic configuration
 " {{{
 
-" Aussehen
-set number                              " Zeilennummern einblenden
-set icon                                " Icon im Grafik-Terminal
-
-" Lightline
-let g:lightline = { 'colorscheme': 'wombat' }
-"export TERM=xterm-256color
-
 " Colorscheme
 set t_Co=256
 "colorscheme wombat256
 colorscheme buddy
+let g:lightline = { 'colorscheme': 'wombat' }
+"export TERM=xterm-256color
 
 " Erkennen von Filetypen
 filetype on
@@ -30,43 +24,41 @@ autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
 autocmd BufWritePost $MYVIMRC nested call lightline#update()
 augroup END
 
-set wrap                                " Lange Zeilen am Ende umbrechen
-set wildmenu                            " Tabvervollstaendigen
-set wildignore=*.o,*.dat,*.exe,*.com    " Ausnahmen des Tabvervollstaendigen
-set wildmode=list:longest               " Bash-like autovervollstaendigen
+set number                              " Set linenumbers
+set icon                                " Icon in GVim
+set wrap                                " Wrap line if necessary
+set wildmenu                            " Autocomplete in commandmode
+set wildignore=*.o,*.dat,*.exe,*.com    " Exclude binaries from autocomplete
+set wildmode=list:longest               " Bash-like preview on autocomplete
 set nomore                              " Kein More (global)
-set hlsearch                            " Alle Suchergebnisse markieren
-set scrolloff=2                         " sichtbare Zeilen beim scrollen
-set sidescroll=5                        " sichtbare Spalten beim scrollen
+set hlsearch                            " Highlight all search results
+set scrolloff=2                         " Show 2 more rows on scrolling
+set sidescroll=5                        " Show 5 more columns in scrolling
 set showcmd                             " CMD immer anzeigen
-set showmatch                           " passende Zeichen highlighten
-set showmode                            " Modus anzeigen
-set tabpagemax=15                       " Maximale Tabs in Vim
-set showtabline=2                       " Linie mit Tabs
-set guitablabel=[%N]\ %t\ %M\ %X        " Tabbeschriftung
+set showmatch                           " Highlight matching braces
+set showmode                            " Show mode I'm in
+set tabpagemax=15                       " Max. amount of tabpages
+set showtabline=2                       " Always show tabline
+set guitablabel=[%N]\ %t\ %M\ %X        " Label for tabpages
 set guioptions-=e                       " use terminaltabline in gvim
 set guioptions-=m                       " remove menu bar
 set guioptions-=T                       " remove toolbar
 set guioptions-=r                       " remove right-hand scroll bar
 set guioptions-=L                       " remove left-hand scroll bar
-set mousehide                           " Maus waehrend schreiben ausbl.
-set autowrite                           " Speichern vor :next and :make
-set hidden                              " Buffer verstecken wenn nicht benoetigt
-if has("gui_running")
-    set cursorline                          " Aktuelle Zeile hervorheben
-    highlight  CursorLine ctermbg=DarkGrey ctermfg=None
-    set cursorcolumn                        " Aktuelle Spalte hervorheben
-    highlight  CursorColumn ctermbg=DarkGrey ctermfg=None
-endif
+set mousehide                           " Hide mouse while typing
+set autowrite                           " Write before :next and :make
+set hidden                              " Keep buffers hidden
+set cursorline                          " Show line of the cursor
+set cursorcolumn                        " Show column of the cursor
 highlight  Cursor ctermbg=DarkGrey ctermfg=None         " Color Cursor
-set colorcolumn=81                      " Spaltenueberschreitung markieren
+set colorcolumn=81                      " Show 81 column in red
 highlight ColorColumn guibg=#B40404 ctermbg=red
-set noerrorbells                        " Error Toene ausschalten
+set noerrorbells                        " Mute errorbells
 set visualbell
 set t_vb=
-set list                                " Tabs mit Pipe anzeigen
-set listchars=tab:\|\
-set ch=1                                " VIM Commandline 1 Zeile
+set list                                " Show tab characters
+set listchars=tab:\>\
+set ch=1                                " 1 line vim commandline
 set complete-=i                         " disable includes for autocomplete
 set completeopt=longest,menuone
 
@@ -79,40 +71,65 @@ endif
 if has("win32")
     let &guioptions = substitute(&guioptions, "t", "", "g") " Kein Menueintraege entfernen
 endif
-set linebreak                           " Keine Zeilenumbrueche in Woertern
-set undolevels=999                      " 999 Undo-Eintraege
-set history=999                         " 999 Befehlshistoryeintraege
-
-" Steuerung
-set nocp                                " Kein Kompartibilitaetsmodus
-set mouse=a                             " Maus aktivieren
-set ruler                               " Position des Zeigers anzeigen
-set clipboard=unnamed                   " Systemzwischenablage
-set backspace=2                         " Loeschen ueber Zeilenende
-set softtabstop=4                       " Darstellung des Tabs als 2 LZ
-set tabstop=4                           " Anzahl LZ im Tab
-set shiftwidth=4                        " Autoeinrueckung auf 4 LZ
-set autoindent                          " Autoeinrueckung aktivieren
-set smartindent                         " Verfahen beim Texteinzug
-set ignorecase                          " Casesensitivitaet deakt.
-set smartcase                           " Smarte Casesensivitaet
-set incsearch                           " Sofortige Suche
-set ttyfast                             " schnelle Verbindung
-set formatoptions+=r                    " Aktivieren Autocomment
-set shellslash                          " Keine Backslashes in CMD
+set linebreak                           " Do not break line within a word
+set undolevels=999                      " Longer undo history
+set history=999                         " Longer command history
+set nocp                                " No compratible mode to vi
+set mouse=a                             " Mouse support
+set ruler                               " Show position of the cursor
+set clipboard=unnamed                   " Use system clipboard
+set backspace=2                         " Make backspace behave sane
+set softtabstop=4                       " One tab is 4 spaces while editing
+set tabstop=4
+set shiftwidth=4
+set expandtab                           " Simply replace tabs with spaces
+set autoindent                          " Autoindent
+set smartindent                         " Smart indenting
+set ignorecase                          " Ignore case while searching
+set smartcase                           " Don't ignore case if capitals incl.
+set incsearch                           " Search for the pattern before <CR>
+set ttyfast                             " fast connection
+set formatoptions+=r                    " Autocomment
+set formatoptions+=j                    " Delete comment char on join
+set formatoptions
+set shellslash                          " Substitute backslashes w/ shellslash
 set foldmethod=indent                   " Folding
 set foldenable
 set foldlevelstart=10
 set foldnestmax=3
-set expandtab
-set omnifunc=syntaxcomplete#Complete    " Autokomplettierung basierend auf Sp.
-set lazyredraw
+set omnifunc=syntaxcomplete#Complete    " Autocomplete using syntax
+set lazyredraw                          " Don't redraw in macros -> faster
 set copyindent
 if v:version >= 800
     set breakindent                     " Breakindent for versions 8 and above
 endif
 set splitright                          " Put new splits where they belong
 set splitbelow
+set printheader=%<%F%=Seite\ %N         " Printer settings
+set printoptions=left:10pc,right:10pc,top:5pc,bottom:5pc,number:y
+set viminfo='1000,f1                    " Longer history in viminfo
+set sessionoptions+=unix,slash          " Use shellslashes in sessions
+set backup
+set writebackup
+" backup and swapdirectory
+if has("win32") || has("win16")
+    set backupdir=~/vimfiles/cache//
+    set directory=~/vimfiles/cache//
+elseif has("unix") || has("linux") || has("mac") || has("macunix")
+    set backupdir=~/.vim/cache//
+    set directory=~/.vim/cache//
+endif
+if has('persistent_undo')
+    " undo directory
+    if has("win32") || has("win16")
+        set undodir=~/vimfiles/cache//
+    elseif has("unix") || has("linux") || has("mac") || has("macunix")
+        set undodir=~/.vim/cache//
+    endif
+    set undofile
+endif
+
+
 " }}}
 
 
@@ -268,39 +285,10 @@ autocmd BufNewFile,BufRead,BufEnter *.md setf markdown
 augroup END
 " }}}
 
-" Drucker
-set printheader=%<%F%=Seite\ %N
-set printoptions=left:10pc,right:10pc,top:5pc,bottom:5pc,number:y
-
-" Security
-" {{{
-set viminfo='1000,f1
-set sessionoptions+=unix,slash
-set backup
-" backup and swapdirectory
-if has("win32") || has("win16")
-    set backupdir=~/vimfiles/cache//
-    set directory=~/vimfiles/cache//
-elseif has("unix") || has("linux") || has("mac") || has("macunix")
-    set backupdir=~/.vim/cache//
-    set directory=~/.vim/cache//
-endif
-set writebackup
-if has('persistent_undo')
-    " undo directory
-    if has("win32") || has("win16")
-        set undodir=~/vimfiles/cache//
-    elseif has("unix") || has("linux") || has("mac") || has("macunix")
-        set undodir=~/.vim/cache//
-    endif
-    set undofile
-endif
-
 " Create backup directory, if it doesn't exists
 if !isdirectory(expand(&backupdir))
     call mkdir(expand(&backupdir), "p")
 endif
-" }}}
 
 " Anderer Mist
 let cobol_legacy_code=1
