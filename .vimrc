@@ -57,7 +57,12 @@ set noerrorbells                        " Mute errorbells
 set visualbell
 set t_vb=
 set list                                " Show tab characters
-set listchars=tab:\>\
+set listchars=nbsp:⸰                    " U+2E30 RING POINT
+set listchars+=tab:»»                   " U+00BB DOUBLE ANGLE QUOTATION MARK
+set listchars+=trail:•                  " U+2022 BULLET
+set listchars+=eol:¶                    " U+00B6 PILCROW SIGN
+highlight NonText ctermbg=None
+highlight SpecialKey ctermbg=None
 set ch=1                                " 1 line vim commandline
 set complete-=i                         " disable includes for autocomplete
 set completeopt=longest,menuone
