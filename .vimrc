@@ -91,7 +91,6 @@ set incsearch                           " Search for the pattern before <CR>
 set ttyfast                             " fast connection
 set formatoptions+=r                    " Autocomment
 set formatoptions+=j                    " Delete comment char on join
-set formatoptions
 set shellslash                          " Substitute backslashes w/ shellslash
 set foldmethod=indent                   " Folding
 set foldenable
