@@ -47,7 +47,7 @@ set guioptions-=r                       " remove right-hand scroll bar
 set guioptions-=L                       " remove left-hand scroll bar
 set mousehide                           " Hide mouse while typing
 set autowrite                           " Write before :next and :make
-set hidden                              " Keep buffers hidden
+set hidden                              " Keep buffers hidden without saving
 set cursorline                          " Show line of the cursor
 set cursorcolumn                        " Show column of the cursor
 highlight  Cursor ctermbg=DarkGrey ctermfg=None         " Color Cursor
@@ -106,6 +106,7 @@ set lazyredraw                          " Don't redraw in macros -> faster
 set copyindent
 if v:version >= 800
     set breakindent                     " Breakindent for versions 8 and above
+    set belloff=all                     " Turn all bells off with Vim 8 option
 endif
 set splitright                          " Put new splits where they belong
 set splitbelow
@@ -113,26 +114,26 @@ set printheader=%<%F%=Seite\ %N         " Printer settings
 set printoptions=left:10pc,right:10pc,top:5pc,bottom:5pc,number:y
 set viminfo='1000,f1                    " Longer history in viminfo
 set sessionoptions+=unix,slash          " Use shellslashes in sessions
-set backup
-set writebackup
-" backup and swapdirectory
-if has("win32") || has("win16")
-    set backupdir=~/vimfiles/cache//
+if has("win32") || has("win16")         " Write backups in separate directory
+    set backupdir=~/vimfiles/cache//    " and set path for swapfiles
     set directory=~/vimfiles/cache//
-elseif has("unix") || has("linux") || has("mac") || has("macunix")
+elseif has("unix") || has("linux")
     set backupdir=~/.vim/cache//
     set directory=~/.vim/cache//
 endif
-if has('persistent_undo')
-    " undo directory
-    if has("win32") || has("win16")
-        set undodir=~/vimfiles/cache//
-    elseif has("unix") || has("linux") || has("mac") || has("macunix")
-        set undodir=~/.vim/cache//
-    endif
-    set undofile
+set backup                              " Actually turn backups on
+set writebackup
+set swapfile                            " Turn on swapfiles explicitly
+if has("win32") || has("win16")         " Turn on persistent undo and
+    set undodir=~/vimfiles/cache//      " set undo directory
+elseif has("unix") || has("linux")
+    set undodir=~/.vim/cache//
 endif
-
+set undofile
+set conceallevel=2                      " Replace certain characters with the
+set concealcursor=nvc                   " proper symbol in normalmode
+hi Conceal guibg=NONE guifg=white ctermbg=NONE ctermfg=white
+set guifont=DejaVu\ Sans\ Mono          " Set the font for GVim
 
 " }}}
 
@@ -171,8 +172,8 @@ inoremap <Down> <Nop>
 inoremap <Right> <Nop>
 inoremap <Left> <Nop>
 " Use very-magic mode in regexes (Perl-like)
-"nnoremap / /\v
-"vnoremap / /\v
+nnoremap / /\v
+vnoremap / /\v
 nnoremap Q <Nop>
 " Indent with < and >
 vnoremap < <gv
@@ -264,14 +265,8 @@ autocmd BufEnter,BufNewFile,BufRead *.txt,*.tex,mutt*,*.log setlocal nolist
 autocmd BufEnter,BufNewFile,BufRead *.txt,*.tex,mutt*,*.log setlocal colorcolumn=
 augroup END
 " Replace LaTeX commands with unicode symbols
-set conceallevel=2
-set concealcursor=nvc
-hi Conceal guibg=NONE guifg=white ctermbg=NONE ctermfg=white
 let g:tex_conceal="adgms"
-" Patch font on MS Windows
-if has("win32") && has("gui_running")
-    set guifont=DejaVu\ Sans\ Mono
-endif
+
 " texcompile conf
 if has("win32")
     let g:tex_readerpath = 
