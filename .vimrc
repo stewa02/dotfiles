@@ -1,29 +1,36 @@
-
+"
 " VIMRC stewa02
+"
 
-" basic configuration
-" {{{
-
+"
 " Colorscheme
+"
 set t_Co=256
 "colorscheme wombat256
 colorscheme buddy
 let g:lightline = { 'colorscheme': 'wombat' }
 "export TERM=xterm-256color
 
-" Erkennen von Filetypen
+"
+" Filetype
+"
 filetype on
 filetype indent on
 filetype plugin on
 syntax enable
 
+"
 " Auto reload .vimrc/_vimrc
+"
 augroup Reload
 autocmd!
 autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
 autocmd BufWritePost $MYVIMRC nested call lightline#update()
 augroup END
 
+"
+" Settings
+"
 set number                              " Set linenumbers
 set icon                                " Icon in GVim
 set wrap                                " Wrap line if necessary
@@ -63,19 +70,17 @@ set listchars+=trail:•                  " U+2022 BULLET
 set listchars+=eol:¶                    " U+00B6 PILCROW SIGN
 highlight NonText ctermbg=None
 highlight SpecialKey ctermbg=None
+set fillchars=vert:┃                    " U+2503 BOX DRAWINGS HEAVY VERTICAL
 set ch=1                                " 1 line vim commandline
 set complete-=i                         " disable includes for autocomplete
 set completeopt=longest,menuone
-
 if has("gui_running")
     set lines=999 columns=999           " keep GVim in fullscreen
     if has("win32")
         au GUIEnter * simalt ~x
     endif
 endif
-if has("win32")
-    let &guioptions = substitute(&guioptions, "t", "", "g") " Kein Menueintraege entfernen
-endif
+let &guioptions = substitute(&guioptions, "t", "", "g") " No cutting off menus
 set linebreak                           " Do not break line within a word
 set undolevels=999                      " Longer undo history
 set history=999                         " Longer command history
@@ -129,17 +134,50 @@ if has("win32") || has("win16")         " Turn on persistent undo and
 elseif has("unix") || has("linux")
     set undodir=~/.vim/cache//
 endif
-set undofile
+set undofile                            " Actually turn on undofiles
 set conceallevel=2                      " Replace certain characters with the
 set concealcursor=nvc                   " proper symbol in normalmode
 hi Conceal guibg=NONE guifg=white ctermbg=NONE ctermfg=white
 set guifont=DejaVu\ Sans\ Mono          " Set the font for GVim
+augroup numbering                       " Only show relative line numbers in 
+autocmd!
+autocmd InsertEnter * set norelativenumber
+autocmd InsertLeave * set relativenumber
+augroup END                             " in normal mode
+let cobol_legacy_code=1                 " Enable useful defaults for COBOL
+let g:netrw_liststyle=3                 " Make netrw a little more pleasant
 
-" }}}
+"
+" Statusline
+"
+set laststatus=2
+hi User1 guifg=#eea040 guibg=#222222
+hi User2 guifg=#dd3333 guibg=#222222
+hi User3 guifg=#ff66ff guibg=#222222
+hi User4 guifg=#a0ee40 guibg=#222222
+hi User5 guifg=#eeee40 guibg=#222222
+set statusline=
+set statusline+=%1*\ %n\ %*             " buffer number
+set statusline+=%5*%{&ff}%*             " file format
+set statusline+=%3*%y%*                 " file type
+set statusline+=%4*\ %<%F%*             " full path
+set statusline+=%2*%m%*                 " modified flag
+set statusline+=%1*%=%5l%*              " current line
+set statusline+=%2*/%L%*                " total lines
+set statusline+=%1*%4v\ %*              " virtual column number
+set statusline+=%2*0x%04B\ %*           " character under cursor
 
+"
+" Locale
+"
+set encoding=utf-8                      " Use UTF-8 encoding in buffers
+setglobal fileencoding=utf-8            " Use UTF-8 encoding when writing file
+set spelllang=de                        " Use German as spelllang
+set spellsuggest=double,10              " Configure spelling suggestions
 
-" mappings
-" {{{
+"
+" Mappings
+"
 let mapleader="\<Space>"
 nnoremap <leader>q :q<CR>
 nnoremap <leader>w :w<CR>
@@ -188,87 +226,63 @@ inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
 " Don't jump to next match with * operator
 nnoremap * *<C-o>
 
-" don't rage at me for typos
+"
+" Commands
+"
 command! WQ wq
 command! Wq wq
 command! W w
 command! Q q
-" }}}
 
-" Keep splits evenly sized when window is resized (particularly in GVim)
+"
+" Resize all splits when resizing the window
+"
 augroup Resize
 autocmd!
 autocmd VimResized * :wincmd =
 augroup END
 
-" Statusline
-" {{{
-set laststatus=2
-hi User1 guifg=#eea040 guibg=#222222
-hi User2 guifg=#dd3333 guibg=#222222
-hi User3 guifg=#ff66ff guibg=#222222
-hi User4 guifg=#a0ee40 guibg=#222222
-hi User5 guifg=#eeee40 guibg=#222222
-set statusline =
-set statusline +=%1*\ %n\ %*            " buffer number
-set statusline +=%5*%{&ff}%*            " file format
-set statusline +=%3*%y%*                " file type
-set statusline +=%4*\ %<%F%*            " full path
-set statusline +=%2*%m%*                " modified flag
-set statusline +=%1*%=%5l%*             " current line
-set statusline +=%2*/%L%*               " total lines
-set statusline +=%1*%4v\ %*             " virtual column number
-set statusline +=%2*0x%04B\ %*          " character under cursor
-" }}}
-
-" Locale
-" {{{
-set encoding=utf-8                      " Vim auf UTF-8
-setglobal fileencoding=utf-8            " Mit Vim erstellte Files auf UTF-8
-set spelllang=de                        " Rechtschreibpruefung auf DE
-set spellsuggest=double,10              " Art und Anzahl Vorschlaege
-" }}}
-
-" Filetype specific stuff
-" {{{
-
+"
 " Perl
-set comments=sl:#,mb:#,elx:#            " Autocomment fuer Perl etc.
+"
 augroup perl
 autocmd!
-autocmd FileType perl set keywordprg=perldoc\ -f     " Perldoc wenn K ueber Keyword
-autocmd FileType perl set makeprg=perl\ -c\ %\ $*    " Perl Syntaxcheck wenn :make
-autocmd BufNewFile,BufRead *.pl,*.pm,*.t  setlocal filetype perl 
+autocmd BufNewFile,BufRead *.pl,*.pm,*.t  setlocal filetype perl
+autocmd FileType perl setlocal keywordprg=perldoc\ -f     " Perldoc for shift-K
+autocmd FileType perl setlocal makeprg=perl\ -c\ %\ $*    " Set tool for :make
+autocmd FileType perl setlocal comments=sl:#,mb:#,elx:#   " Autocomment chars
 augroup END
 let perl_include_pod = 1                " Plain Old Documentation
-let perl_extended_vars = 1              " Komplexe Variablenstrukturen
-let perl_fold = 1                       " Perl-Folding
+let perl_extended_vars = 1              " Highlight variable structures well
+let perl_fold = 1                       " Perl specific folding
 let perl_fold_blocks = 1
 
-" Python
-augroup python
+"
+" Vimscript
+"
+augroup vimscript
 autocmd!
-autocmd BufNewFile,BufRead *.py  setlocal filetype python
-autocmd FileType python nmap <F5> :w<CR>:!python %<CR>:!pause<CR> 
+autocmd FileType vim setlocal comments=sl:",mb:",elx:"
 augroup END
 
-" Gnuplot files
+"
+" Gnuplot
+"
 augroup gnuplot
 autocmd!
 autocmd BufNewFile,BufRead *.gp setlocal filetype gnuplot
 augroup END
 
-" LaTEX
+"
+" LaTEX and plain text files
+"
 augroup latex_and_plaintext
 autocmd!
 autocmd BufEnter,BufNewFile,BufRead *.txt,*.tex,mutt*,*.log setlocal nolist
 autocmd BufEnter,BufNewFile,BufRead *.txt,*.tex,mutt*,*.log setlocal colorcolumn=
 augroup END
-" Replace LaTeX commands with unicode symbols
-let g:tex_conceal="adgms"
-
-" texcompile conf
-if has("win32")
+let g:tex_conceal="adgms"               " Replace LaTeX with Unicode symbols
+if has("win32")                         " Set texcompile.vim settings
     let g:tex_readerpath = 
         \'C:\Program Files (x86)\Adobe\Acrobat Reader DC\Reader\AcroRd32.exe'
     let g:tex_readerproc = 'AcroRd32.exe'
@@ -277,31 +291,24 @@ else
     let g:tex_readerproc = 'evince'
 endif
 
+"
 " Markdown
+"
 augroup markdown
 autocmd!
 autocmd BufNewFile,BufRead,BufEnter *.md setf markdown
 augroup END
-" }}}
 
+"
 " Create backup directory, if it doesn't exists
+"
 if !isdirectory(expand(&backupdir))
     call mkdir(expand(&backupdir), "p")
 endif
 
-" Anderer Mist
-let cobol_legacy_code=1
-if has("win32") || v:version >= 800
-    augroup numbering
-    autocmd!
-    autocmd InsertEnter * set norelativenumber
-    autocmd InsertLeave * set relativenumber
-    augroup END
-endif
-" make netrw more pleasant without filling your entire HDD with NERDTree
-let g:netrw_liststyle=3
-
+"
 " Colorizer
+"
 let g:colorizer_nomap = 1
 if has("gui_running")
     augroup colorizer
@@ -310,4 +317,3 @@ if has("gui_running")
     augroup END
 endif
 
-" vim:foldmethod=marker
