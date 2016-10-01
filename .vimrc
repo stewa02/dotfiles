@@ -247,7 +247,7 @@ augroup END
 "
 augroup perl
 autocmd!
-autocmd BufNewFile,BufRead *.pl,*.pm,*.t  setlocal filetype perl
+autocmd BufNewFile,BufRead *.pl,*.pm,*.t  setlocal filetype=perl
 autocmd FileType perl setlocal keywordprg=perldoc\ -f     " Perldoc for shift-K
 autocmd FileType perl setlocal makeprg=perl\ -c\ %\ $*    " Set tool for :make
 autocmd FileType perl setlocal comments=sl:#,mb:#,elx:#   " Autocomment chars
@@ -262,7 +262,7 @@ let perl_fold_blocks = 1
 "
 augroup vimscript
 autocmd!
-autocmd FileType vim setlocal comments=sl:",mb:",elx:"
+autocmd FileType vim setlocal comments=sl:\",mb:\",elx:\"
 augroup END
 
 "
@@ -270,7 +270,7 @@ augroup END
 "
 augroup gnuplot
 autocmd!
-autocmd BufNewFile,BufRead *.gp setlocal filetype gnuplot
+autocmd BufNewFile,BufRead *.gp setlocal filetype=gnuplot
 augroup END
 
 "
@@ -296,7 +296,7 @@ endif
 "
 augroup markdown
 autocmd!
-autocmd BufNewFile,BufRead,BufEnter *.md setf markdown
+autocmd BufNewFile,BufRead,BufEnter *.md setlocal filetype=markdown
 augroup END
 
 "
