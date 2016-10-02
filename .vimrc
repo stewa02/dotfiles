@@ -36,7 +36,8 @@ set icon                                " Icon in GVim
 set wrap                                " Wrap line if necessary
 set wildmenu                            " Autocomplete in commandmode
 set wildignore=*.o,*.dat,*.exe,*.com    " Exclude binaries from autocomplete
-set wildmode=list:longest               " Bash-like preview on autocomplete
+set wildmode=list:longest,full          " Bash-like preview on autocomplete
+set infercase                           " Change completion to match case
 set nomore                              " Kein More (global)
 set hlsearch                            " Highlight all search results
 set scrolloff=2                         " Show 2 more rows on scrolling
@@ -57,14 +58,14 @@ set autowrite                           " Write before :next and :make
 set hidden                              " Keep buffers hidden without saving
 set cursorline                          " Show line of the cursor
 set cursorcolumn                        " Show column of the cursor
-highlight  Cursor ctermbg=DarkGrey ctermfg=None         " Color Cursor
+highlight Cursor ctermbg=DarkGrey ctermfg=None
 set colorcolumn=81                      " Show 81 column in red
 highlight ColorColumn guibg=#B40404 ctermbg=red
 set noerrorbells                        " Mute errorbells
 set visualbell
 set t_vb=
 set list                                " Show tab characters
-set listchars=nbsp:⸰                    " U+2E30 RING POINT
+set listchars=nbsp:✖                    " U+2716 HEAVY MULTIPLICATION X
 set listchars+=tab:»»                   " U+00BB DOUBLE ANGLE QUOTATION MARK
 set listchars+=trail:•                  " U+2022 BULLET
 set listchars+=eol:¶                    " U+00B6 PILCROW SIGN
@@ -101,6 +102,7 @@ set incsearch                           " Search for the pattern before <CR>
 set ttyfast                             " fast connection
 set formatoptions+=r                    " Autocomment
 set formatoptions+=j                    " Delete comment char on join
+set formatoptions+=n                    " Format numbered lists
 set shellslash                          " Substitute backslashes w/ shellslash
 set foldmethod=indent                   " Folding
 set foldenable
@@ -117,7 +119,7 @@ set splitright                          " Put new splits where they belong
 set splitbelow
 set printheader=%<%F%=Seite\ %N         " Printer settings
 set printoptions=left:10pc,right:10pc,top:5pc,bottom:5pc,number:y
-set viminfo='1000,f1                    " Longer history in viminfo
+set viminfo=h,'500,<10000,s1000,/1000,:1000 " Make viminfo file remember more
 set sessionoptions+=unix,slash          " Use shellslashes in sessions
 if has("win32") || has("win16")         " Write backups in separate directory
     set backupdir=~/vimfiles/cache//    " and set path for swapfiles
