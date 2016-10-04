@@ -68,7 +68,8 @@ set list                                " Show tab characters
 set listchars=nbsp:✖                    " U+2716 HEAVY MULTIPLICATION X
 set listchars+=tab:»»                   " U+00BB DOUBLE ANGLE QUOTATION MARK
 set listchars+=trail:•                  " U+2022 BULLET
-set listchars+=eol:¶                    " U+00B6 PILCROW SIGN
+"set listchars+=eol:¶                   " U+00B6 PILCROW SIGN
+set listchars+=eol:↩                    " U+21A9 LEFTWARDS ARROW WITH HOOK
 highlight NonText ctermbg=None
 highlight SpecialKey ctermbg=None
 set fillchars=vert:┃                    " U+2503 BOX DRAWINGS HEAVY VERTICAL
