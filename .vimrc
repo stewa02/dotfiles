@@ -70,8 +70,9 @@ set listchars+=tab:»»                   " U+00BB DOUBLE ANGLE QUOTATION MARK
 set listchars+=trail:•                  " U+2022 BULLET
 "set listchars+=eol:¶                   " U+00B6 PILCROW SIGN
 set listchars+=eol:↩                    " U+21A9 LEFTWARDS ARROW WITH HOOK
-highlight NonText ctermbg=None
-highlight SpecialKey ctermbg=None
+highlight NonText ctermbg=None guibg=NONE
+highlight SpecialKey ctermbg=None guibg=NONE
+highlight Comment cterm=italic          " Make terminal comments italic
 set fillchars=vert:┃                    " U+2503 BOX DRAWINGS HEAVY VERTICAL
 set ch=1                                " 1 line vim commandline
 set complete-=i                         " disable includes for autocomplete
@@ -115,6 +116,7 @@ set copyindent
 if v:version >= 800
     set breakindent                     " Breakindent for versions 8 and above
     set belloff=all                     " Turn all bells off with Vim 8 option
+    set termguicolors                   " Use proper colours in terminal
 endif
 set splitright                          " Put new splits where they belong
 set splitbelow

@@ -7,6 +7,9 @@ echo Welcome $USER@`hostname`!
 echo Current date and time: `date +"%d. %B %Y"` `date +"%H:%M:%S"`h `date +"%Z"`
 perl ~/.bash.fetchrss.pl
 
+# Basically yell "256 COLOURS" at tmux, until it notices
+export TERM=xterm-256color
+
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
@@ -114,15 +117,15 @@ alias cd..='cd ..'
 alias ping='ping -c 4'
 
 # Open tmx with 256 colour support
-alias tmux='tmux -2'
+#alias tmux='tmux -2'
 
 # Open new files in new tabs. This is not necessary anymore the bug that this 
 # alias solved is now fixed in sessionmanager.vim
 #alias vim='vim -c "tabnew %"'
 
 # Small aliases for the source-compiled vim8
-alias vim8='/opt/bin/vim'
-alias gvim8='/opt/bin/gvim'
+#alias vim8='/opt/bin/vim'
+#alias gvim8='/opt/bin/gvim'
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
