@@ -188,6 +188,9 @@ nnoremap <leader>q :q<CR>
 nnoremap <leader>w :w<CR>
 nnoremap <leader>e :tabnew<CR>:Explore<CR>
 nnoremap <leader>n :nohl<CR>
+" show different aspects of the with the buffer associated file
+nnoremap <leader>fp :echo expand("%:p")<CR>
+nnoremap <leader>fn :echo expand("%:t")<CR>
 " Toggle folding
 nnoremap <leader>f za
 " Mappings for tabpages
