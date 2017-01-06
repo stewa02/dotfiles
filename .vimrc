@@ -8,7 +8,8 @@
 set t_Co=256
 "colorscheme wombat256
 colorscheme buddy
-let g:lightline = { 'colorscheme': 'wombat' }
+let g:lightline = { 'colorscheme': 'buddy' }
+"let g:buddy_notermitalics = 1
 "export TERM=xterm-256color
 
 "
@@ -58,9 +59,7 @@ set autowrite                           " Write before :next and :make
 set hidden                              " Keep buffers hidden without saving
 set cursorline                          " Show line of the cursor
 set cursorcolumn                        " Show column of the cursor
-highlight Cursor ctermbg=DarkGrey ctermfg=None
 set colorcolumn=81                      " Show 81 column in red
-highlight ColorColumn guibg=#B40404 ctermbg=red
 set noerrorbells                        " Mute errorbells
 set visualbell
 set t_vb=
@@ -70,9 +69,6 @@ set listchars+=tab:»»                   " U+00BB DOUBLE ANGLE QUOTATION MARK
 set listchars+=trail:•                  " U+2022 BULLET
 "set listchars+=eol:¶                   " U+00B6 PILCROW SIGN
 set listchars+=eol:↩                    " U+21A9 LEFTWARDS ARROW WITH HOOK
-highlight NonText ctermbg=None guibg=NONE
-highlight SpecialKey ctermbg=None guibg=NONE
-highlight Comment cterm=italic          " Make terminal comments italic
 set fillchars=vert:┃                    " U+2503 BOX DRAWINGS HEAVY VERTICAL
 set ch=1                                " 1 line vim commandline
 set complete-=i                         " disable includes for autocomplete
@@ -142,7 +138,7 @@ endif
 set undofile                            " Actually turn on undofiles
 set conceallevel=2                      " Replace certain characters with the
 set concealcursor=nvc                   " proper symbol in normalmode
-hi Conceal guibg=NONE guifg=white ctermbg=NONE ctermfg=white
+"hi Conceal guibg=NONE guifg=white ctermbg=NONE ctermfg=white
 set guifont=DejaVu\ Sans\ Mono          " Set the font for GVim
 augroup numbering                       " Only show relative line numbers in 
 autocmd!
@@ -151,6 +147,10 @@ autocmd InsertLeave * set relativenumber
 augroup END                             " in normal mode
 let cobol_legacy_code=1                 " Enable useful defaults for COBOL
 let g:netrw_liststyle=3                 " Make netrw a little more pleasant
+let g:netrw_banner=0
+let g:netrw_winsize=20
+let g:netrw_browse_split=4
+let g:netrw_altv=1
 
 "
 " Statusline
@@ -186,7 +186,7 @@ set spellsuggest=double,10              " Configure spelling suggestions
 let mapleader="\<Space>"
 nnoremap <leader>q :q<CR>
 nnoremap <leader>w :w<CR>
-nnoremap <leader>e :tabnew<CR>:Explore<CR>
+nnoremap <leader>e :Vexplore<CR>
 nnoremap <leader>n :nohl<CR>
 " show different aspects of the with the buffer associated file
 nnoremap <leader>fp :echo expand("%:p")<CR>
@@ -318,10 +318,8 @@ endif
 " Colorizer
 "
 let g:colorizer_nomap = 1
-if has("gui_running")
-    augroup colorizer
-    autocmd!
-    autocmd VimEnter * ColorHighlight
-    augroup END
-endif
+augroup colorizer
+autocmd!
+autocmd VimEnter * ColorHighlight
+augroup END
 
