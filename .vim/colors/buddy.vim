@@ -42,10 +42,6 @@ set background=dark
 "highlight Directory -- no settings --
 "highlight Underlined -- no settings --
 "highlight clear -- no settings --
-"highlight SpellRare -- no settings --
-"highlight SpellCap -- no settings --
-"highlight SpellLocal -- no settings --
-"highlight SpellBad -- no settings --
 
 " Enable comment italics as the default, but make it possible to disable it if
 " the term doesn't support it or the user simply prefers to have no italics.
@@ -56,8 +52,14 @@ else
 endif
 
 " Highlight groups that are set or will be set in due time.
-highlight IncSearch      guifg=#c25643 guibg=NONE                  gui=underline,bold ctermfg=167  ctermbg=NONE cterm=underline,bold
-highlight Search         guifg=#c25643 guibg=NONE                  gui=underline,bold ctermfg=167  ctermbg=NONE cterm=underline,bold
+highlight SpellRare      guifg=#d9d9d9 guibg=#5b802c               gui=NONE           ctermfg=253  ctermbg=2    cterm=NONE
+highlight SpellLocal     guifg=#d9d9d9 guibg=#5b802c               gui=NONE           ctermfg=253  ctermbg=2    cterm=NONE
+highlight SpellCap       guifg=#202020 guibg=#5dd2fd               gui=NONE           ctermfg=234  ctermbg=81   cterm=NONE
+highlight SpellBad       guifg=#202020 guibg=#5dd2fd               gui=NONE           ctermfg=234  ctermbg=81   cterm=NONE
+highlight IncSearch      guifg=#202020 guibg=#fff200               gui=NONE           ctermfg=234  ctermbg=11   cterm=NONE
+highlight Search         guifg=#202020 guibg=#fff200               gui=NONE           ctermfg=234  ctermbg=11   cterm=NONE
+"highlight IncSearch      guifg=#c25643 guibg=NONE                  gui=underline,bold ctermfg=167  ctermbg=NONE cterm=underline,bold
+"highlight Search         guifg=#c25643 guibg=NONE                  gui=underline,bold ctermfg=167  ctermbg=NONE cterm=underline,bold
 highlight ColorColumn    guifg=NONE    guibg=#8a3636               gui=NONE           ctermfg=NONE ctermbg=95   cterm=NONE
 highlight TabLineSel     guifg=#d9d9d9 guibg=#8a3636               gui=NONE           ctermfg=253  ctermbg=95   cterm=NONE
 highlight TabLine        guifg=#d9d9d9 guibg=#666666               gui=NONE           ctermfg=253  ctermbg=242  cterm=NONE
