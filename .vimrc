@@ -33,6 +33,7 @@ augroup END
 " Settings
 "
 set number                              " Set linenumbers
+set relativenumber                      " And relative line numbering
 set icon                                " Icon in GVim
 set wrap                                " Wrap line if necessary
 set wildmenu                            " Autocomplete in commandmode
@@ -138,7 +139,6 @@ endif
 set undofile                            " Actually turn on undofiles
 set conceallevel=2                      " Replace certain characters with the
 set concealcursor=nvc                   " proper symbol in normalmode
-"hi Conceal guibg=NONE guifg=white ctermbg=NONE ctermfg=white
 set guifont=DejaVu\ Sans\ Mono          " Set the font for GVim
 augroup numbering                       " Only show relative line numbers in 
 autocmd!
@@ -177,7 +177,7 @@ set statusline+=%2*0x%04B\ %*           " character under cursor
 "
 set encoding=utf-8                      " Use UTF-8 encoding in buffers
 setglobal fileencoding=utf-8            " Use UTF-8 encoding when writing file
-set spelllang=de                        " Use German as spelllang
+set spelllang=en                        " Use English as spelllang
 set spellsuggest=double,10              " Configure spelling suggestions
 
 "
@@ -251,59 +251,13 @@ autocmd VimResized * :wincmd =
 augroup END
 
 "
-" Perl
+" Filetypes
 "
-augroup perl
+augroup Filetypes
 autocmd!
 autocmd BufNewFile,BufRead *.pl,*.pm,*.t  setlocal filetype=perl
-autocmd FileType perl setlocal keywordprg=perldoc\ -f     " Perldoc for shift-K
-autocmd FileType perl setlocal makeprg=perl\ -c\ %\ $*    " Set tool for :make
-autocmd FileType perl setlocal comments=sl:#,mb:#,elx:#   " Autocomment chars
-augroup END
-let perl_include_pod = 1                " Plain Old Documentation
-let perl_extended_vars = 1              " Highlight variable structures well
-let perl_fold = 1                       " Perl specific folding
-let perl_fold_blocks = 1
-
-"
-" Vimscript
-"
-augroup vimscript
-autocmd!
-autocmd FileType vim setlocal comments=sl:\",mb:\",elx:\"
-augroup END
-
-"
-" Gnuplot
-"
-augroup gnuplot
-autocmd!
 autocmd BufNewFile,BufRead *.gp setlocal filetype=gnuplot
-augroup END
-
-"
-" LaTEX and plain text files
-"
-augroup latex_and_plaintext
-autocmd!
-autocmd BufEnter,BufNewFile,BufRead *.txt,*.tex,mutt*,*.log setlocal nolist
-autocmd BufEnter,BufNewFile,BufRead *.txt,*.tex,mutt*,*.log setlocal colorcolumn=
-augroup END
-let g:tex_conceal="adgms"               " Replace LaTeX with Unicode symbols
-if has("win32")                         " Set texcompile.vim settings
-    let g:tex_readerpath = 
-        \'C:\Program Files (x86)\Adobe\Acrobat Reader DC\Reader\AcroRd32.exe'
-    let g:tex_readerproc = 'AcroRd32.exe'
-else
-    let g:tex_readerpath = 'evince'
-    let g:tex_readerproc = 'evince'
-endif
-
-"
-" Markdown
-"
-augroup markdown
-autocmd!
+autocmd BufNewFile,BufRead *.tex setlocal filetype=tex
 autocmd BufNewFile,BufRead,BufEnter *.md setlocal filetype=markdown
 augroup END
 
@@ -322,4 +276,12 @@ augroup colorizer
 autocmd!
 autocmd VimEnter * ColorHighlight
 augroup END
+
+"
+" Skeletor
+"
+let g:skeletor_movement = {
+                          \ "html": "9jo",
+                          \ "tex" : "12jo",
+                          \ }
 

@@ -1,0 +1,16 @@
+
+\documentclass{article}
+
+% import literally everything
+\usepackage[intlimits]{amsmath}
+\usepackage[top=2.5cm, bottom=3cm, left=3cm, right=3cm]{geometry}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage[table]{xcolor}
+
+\begin{document}
+
+\end{document}
+
