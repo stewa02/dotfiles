@@ -173,12 +173,22 @@ set statusline+=%1*%4v\ %*              " virtual column number
 set statusline+=%2*0x%04B\ %*           " character under cursor
 
 "
-" Locale
+" Locale, spell checker and thesaurus
 "
 set encoding=utf-8                      " Use UTF-8 encoding in buffers
 setglobal fileencoding=utf-8            " Use UTF-8 encoding when writing file
 set spelllang=en                        " Use English as spelllang
 set spellsuggest=double,10              " Configure spelling suggestions
+" Include thesaurus files for German and English:
+" German: https://www.openthesaurus.de/about/download
+" English: http://www.gutenberg.org/ebooks/3202
+if has("linux") || has("unix")
+    set thesaurus+=~/.vim/thesaurus/de.txt
+    set thesaurus+=~/.vim/thesaurus/en.txt
+elseif has("win32") || has("win64")
+    set thesaurus+=~/vimfiles/thesaurus/de.txt
+    set thesaurus+=~/vimfiles/thesaurus/en.txt
+endif
 
 "
 " Mappings
@@ -202,10 +212,10 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 " Disable arrowkeys in normalmode
-nnoremap <Up> <Nop>
-nnoremap <Down> <Nop>
-nnoremap <Right> <Nop>
-nnoremap <Left> <Nop>
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Right> <Nop>
+noremap <Left> <Nop>
 " Use visual lines for movement
 nnoremap j gj
 nnoremap k gk
@@ -213,10 +223,6 @@ nnoremap k gk
 nnoremap Y y$
 "inoremap <Down> <C-o>gj
 "inoremap <Up> <C-o>gk
-inoremap <Up> <Nop>
-inoremap <Down> <Nop>
-inoremap <Right> <Nop>
-inoremap <Left> <Nop>
 " Use very-magic mode in regexes (Perl-like)
 nnoremap / /\v
 vnoremap / /\v
