@@ -72,7 +72,7 @@ set listchars+=trail:•                  " U+2022 BULLET
 set listchars+=eol:↩                    " U+21A9 LEFTWARDS ARROW WITH HOOK
 set fillchars=vert:┃                    " U+2503 BOX DRAWINGS HEAVY VERTICAL
 set ch=1                                " 1 line vim commandline
-set complete-=i                         " disable includes for autocomplete
+"set complete-=i                         " disable includes for autocomplete
 set completeopt=longest,menuone
 if has("gui_running")
     set lines=999 columns=999           " keep GVim in fullscreen
@@ -202,7 +202,7 @@ nnoremap <leader>n :nohl<CR>
 nnoremap <leader>fp :echo expand("%:p")<CR>
 nnoremap <leader>fn :echo expand("%:t")<CR>
 " Toggle folding
-nnoremap <leader>f za
+nnoremap <leader><Space> za
 " Mappings for tabpages
 nnoremap <F4> :tabn<CR>
 nnoremap <F3> :tabp<CR>
@@ -239,6 +239,12 @@ inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
 inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
 " Don't jump to next match with * operator
 nnoremap * *<C-o>
+" Spelling mappings
+nnoremap <leader>de :set spelllang=de<CR>
+nnoremap <leader>en :set spelllang=en<CR>
+nnoremap <leader>sp z=
+nnoremap <leader>ok zg
+nnoremap <leader>st :set spell!<CR>
 
 "
 " Commands
@@ -264,7 +270,7 @@ autocmd!
 autocmd BufNewFile,BufRead *.pl,*.pm,*.t  setlocal filetype=perl
 autocmd BufNewFile,BufRead *.gp setlocal filetype=gnuplot
 autocmd BufNewFile,BufRead *.tex setlocal filetype=tex
-autocmd BufNewFile,BufRead,BufEnter *.md setlocal filetype=markdown
+autocmd BufNewFile,BufRead,BufEnter *.md setlocal filetype=pandoc
 augroup END
 
 "

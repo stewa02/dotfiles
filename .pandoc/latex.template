@@ -1,0 +1,84 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage[top=2.5cm, bottom=3cm, left=3cm, right=3cm]{geometry}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{array}
+
+% Changed and shortened version of: 
+% https://gist.github.com/michaelt/1017790
+
+% Table formatting: 
+$if(tables)$
+% Continuing on the topic of tables ... (we havent reached `endif`). 
+% The commented out line below is in the default pandoc  latex.template.
+% Some unpleasantness with table formatting must be corrected.
+
+% -- This is needed because raggedright in table elements redefines \\:
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\let\PBS=\PreserveBackslash
+
+$endif$
+
+% Images: 
+$if(graphics)$
+% -- We will generate all images so they have a width \maxwidth. This means
+% -- that they will get their normal width if they fit onto the page, but
+% -- are scaled down if they would overflow the margins.
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+\else\Gin@nat@width\fi}
+\makeatother
+\let\Oldincludegraphics\includegraphics
+\renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=\maxwidth]{#1}}
+$endif$
+
+
+
+% Section numbering. 
+% Here again is a variable you can specify on the commandline
+% `markdown2pdf my.txt --number-sections --xetex --template=/wherever/this/is -o my.pdf`
+$if(numbersections)$
+$else$
+\setcounter{secnumdepth}{0}
+$endif$
+
+
+% Title, authors, date.
+
+$if(title)$
+\title{$title$}
+$endif$
+\author{$for(author)$$author$$sep$\\$endfor$}
+$if(date)$
+\date{$date$}
+$endif$
+
+% document
+
+\begin{document}
+
+
+$if(title)$
+\maketitle
+$endif$
+
+$if(toc)$
+\tableofcontents
+
+$endif$
+
+
+$if(alignment)$
+\begin{$alignment$}
+$endif$
+
+$body$
+
+%$if(alignment)$
+\end{$alignment$}
+$endif$
+
+
+\end{document}
