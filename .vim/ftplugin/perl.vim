@@ -2,6 +2,7 @@
 
 setlocal keywordprg=perldoc\ -f     " Perldoc for shift-K
 setlocal makeprg=perl\ -c\ %\ $*    " Set tool for :make
+setlocal errorformat=%f:%l:%m
 setlocal comments=sl:#,mb:#,elx:#   " Autocomment chars
 
 let perl_include_pod = 1            " Plain Old Documentation

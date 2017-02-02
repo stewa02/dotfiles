@@ -3,14 +3,21 @@
 
 % import literally everything
 \usepackage[intlimits]{amsmath}
+% actually use an entire A4 paper
 \usepackage[top=2.5cm, bottom=3cm, left=3cm, right=3cm]{geometry}
 \usepackage{graphicx}
+\usepackage[ngerman]{babel}
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage{array}
 \usepackage{tabularx}
 \usepackage[table]{xcolor}
+% use Swiss-style quotation marks (like in French)
+\usepackage[autostyle,german=swiss]{csquotes}
 
+% set font-familiy to sans-serif
 \renewcommand{\familydefault}{\sfdefault}
+% set font to Helvetica
 \renewcommand*\rmdefault{phv}
 
 \begin{document}
