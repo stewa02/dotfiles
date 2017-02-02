@@ -20,6 +20,9 @@
 % set font to Helvetica
 \renewcommand*\rmdefault{phv}
 
+% Set \noindent for entire file
+\setlength\parindent{0pt}
+
 \begin{document}
 
 $if(title)$
