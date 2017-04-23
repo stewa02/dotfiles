@@ -5,7 +5,6 @@
 "
 " First things first
 "
-
 set nocompatible                        " No compratible mode to vi
 set encoding=utf-8                      " Use UTF-8 encoding in buffers
 setglobal fileencoding=utf-8            " Use UTF-8 encoding when writing file
