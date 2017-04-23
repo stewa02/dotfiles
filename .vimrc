@@ -3,21 +3,23 @@
 "
 
 "
+" First things first
+"
+
+set nocompatible                        " No compratible mode to vi
+set encoding=utf-8                      " Use UTF-8 encoding in buffers
+setglobal fileencoding=utf-8            " Use UTF-8 encoding when writing file
+
+"
 " Colorscheme
 "
-set t_Co=256
-"colorscheme wombat256
 colorscheme buddy
 let g:lightline = { 'colorscheme': 'buddy' }
-"let g:buddy_notermitalics = 1
-"export TERM=xterm-256color
 
 "
 " Filetype
 "
-filetype on
-filetype indent on
-filetype plugin on
+filetype plugin indent on
 syntax enable
 
 "
@@ -84,7 +86,6 @@ let &guioptions = substitute(&guioptions, "t", "", "g") " No cutting off menus
 set linebreak                           " Do not break line within a word
 set undolevels=999                      " Longer undo history
 set history=999                         " Longer command history
-set nocp                                " No compratible mode to vi
 set mouse=a                             " Mouse support
 set ruler                               " Show position of the cursor
 set clipboard=unnamed                   " Use system clipboard
@@ -175,8 +176,6 @@ set statusline+=%2*0x%04B\ %*           " character under cursor
 "
 " Locale, spell checker and thesaurus
 "
-set encoding=utf-8                      " Use UTF-8 encoding in buffers
-setglobal fileencoding=utf-8            " Use UTF-8 encoding when writing file
 set spelllang=en                        " Use English as spelllang
 set spellsuggest=double,10              " Configure spelling suggestions
 " Include thesaurus files for German and English:
@@ -203,26 +202,34 @@ nnoremap <leader>fp :echo expand("%:p")<CR>
 nnoremap <leader>fn :echo expand("%:t")<CR>
 " Toggle folding
 nnoremap <leader><Space> za
-" Mappings for tabpages
-nnoremap <F4> :tabn<CR>
-nnoremap <F3> :tabp<CR>
+" Mappings for tabpages and buffers
+if has("unix") || has("linux")
+    set <S-F4>=O2S
+    set <S-F3>=O2R
+endif
+nnoremap <S-F4> :tabn<CR>
+nnoremap <S-F3> :tabp<CR>
+nnoremap <F4> :bn<CR>
+nnoremap <F3> :bp<CR>
 " Mappings for movement between splits
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
-" Disable arrowkeys in normalmode
+" Disable arrowkeys
 noremap <Up> <Nop>
 noremap <Down> <Nop>
 noremap <Right> <Nop>
 noremap <Left> <Nop>
+inoremap <Up> <Nop>
+inoremap <Down> <Nop>
+inoremap <Right> <Nop>
+inoremap <Left> <Nop>
 " Use visual lines for movement
 nnoremap j gj
 nnoremap k gk
 " make Y behave like D and C
 nnoremap Y y$
-"inoremap <Down> <C-o>gj
-"inoremap <Up> <C-o>gk
 " Use very-magic mode in regexes (Perl-like)
 nnoremap / /\v
 vnoremap / /\v
@@ -245,6 +252,8 @@ nnoremap <leader>en :set spelllang=en<CR>
 nnoremap <leader>sp z=
 nnoremap <leader>ok zg
 nnoremap <leader>st :set spell!<CR>
+" Buffer management
+nnoremap <leader>ls :ls!<CR>:buffer<Space>
 
 "
 " Commands
@@ -269,9 +278,10 @@ augroup Filetypes
 autocmd!
 autocmd BufNewFile,BufRead *.pl,*.pm,*.t  setlocal filetype=perl
 autocmd BufNewFile,BufRead *.gp setlocal filetype=gnuplot
-autocmd BufNewFile,BufRead *.tex setlocal filetype=tex
 autocmd BufNewFile,BufRead,BufEnter *.md setlocal filetype=pandoc
 augroup END
+
+let g:tex_flavor="latex"
 
 "
 " Create backup directory, if it doesn't exists
