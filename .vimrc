@@ -201,15 +201,6 @@ nnoremap <leader>fp :echo expand("%:p")<CR>
 nnoremap <leader>fn :echo expand("%:t")<CR>
 " Toggle folding
 nnoremap <leader><Space> za
-" Mappings for tabpages and buffers
-if has("unix") || has("linux")
-    set <S-F4>=O2S
-    set <S-F3>=O2R
-endif
-nnoremap <S-F4> :tabn<CR>
-nnoremap <S-F3> :tabp<CR>
-nnoremap <F4> :bn<CR>
-nnoremap <F3> :bp<CR>
 " Mappings for movement between splits
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
@@ -224,6 +215,11 @@ inoremap <Up> <Nop>
 inoremap <Down> <Nop>
 inoremap <Right> <Nop>
 inoremap <Left> <Nop>
+" Mappings for tabpages and buffers
+nnoremap <Right> :tabn<CR>
+nnoremap <Left> :tabp<CR>
+nnoremap <Down> :bn<CR>
+nnoremap <Up> :bp<CR>
 " Use visual lines for movement
 nnoremap j gj
 nnoremap k gk
@@ -302,7 +298,7 @@ augroup END
 " Skeletor
 "
 let g:skeletor_movement = {
-                          \ "html": "9jo",
-                          \ "tex" : "12jo",
+                          \ "html": "9j",
+                          \ "tex" : "26j",
                           \ }
 

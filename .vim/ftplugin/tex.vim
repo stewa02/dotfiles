@@ -6,12 +6,11 @@ setlocal spelllang=de
 setlocal spell
 
 let g:tex_conceal="adgms"               " Replace LaTeX with Unicode symbols
-if has("win32")                         " Set texcompile.vim settings
-    let g:tex_readerpath = 
-        \'C:\Program Files (x86)\Adobe\Acrobat Reader DC\Reader\AcroRd32.exe'
-    let g:tex_readerproc = 'AcroRd32.exe'
-else
-    let g:tex_readerpath = 'evince'
-    let g:tex_readerproc = 'evince'
+
+if has("unix") || has("linux")
+    call system("export max_print_line=9999")
+    let &l:makeprg = 'pdflatex --file-line-error --interaction=nonstopmode "'.
+                   \ expand("%:p").'" --output-directory="'.expand("%:p:h").'"'
+    let &l:errorformat = '%f:%l: %m'
 endif
 

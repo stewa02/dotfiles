@@ -23,6 +23,7 @@
 % Set \noindent for entire file
 \setlength\parindent{0pt}
 
+\renewcommand\labelitemi{{\boldmath\(\cdot\)}}
 \begin{document}
 
 $if(title)$

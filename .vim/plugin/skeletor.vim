@@ -32,6 +32,9 @@ function! s:LoadSkeleton()
      \ has_key(g:skeletor_movement, l:extension)
         execute "normal ".get(g:skeletor_movement, l:extension)
     endif
+
+    %substitute@\v\[VIM_EVAL](.*)\[END_EVAL]@\=eval(submatch(1))@ge
+
 endfunction
 
 " Command and autocommands

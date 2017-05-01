@@ -3,12 +3,26 @@
 
 % import literally everything
 \usepackage[intlimits]{amsmath}
-\usepackage[top=2.5cm, bottom=3cm, left=3cm, right=3cm]{geometry}
+\usepackage[top=3cm, bottom=3cm, left=3cm, right=3cm]{geometry}
 \usepackage{graphicx}
+\usepackage[ngerman]{babel}
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage{array}
 \usepackage{tabularx}
 \usepackage[table]{xcolor}
+\graphicspath{{[VIM_EVAL]expand("%:p:h")[END_EVAL]}}
+
+% use Swiss-style quotation marks (like in French)
+\usepackage[autostyle,german=swiss]{csquotes}
+
+% Use smaller point in lists
+\renewcommand\labelitemi{{\boldmath$\cdot$}}
+% set font-familiy to sans-serif
+\renewcommand{\familydefault}{\sfdefault}
+% set font to Helvetica
+\renewcommand*\rmdefault{phv}
+\newenvironment{bottompar}{\par\vspace*{\fill}}{\clearpage}
 
 \begin{document}
 

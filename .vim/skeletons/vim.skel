@@ -1,0 +1,19 @@
+" [VIM_EVAL]expand("%:t")[END_EVAL] - <description>
+" Last change:   [VIM_EVAL]strftime("%d.%m.%Y")[END_EVAL]
+" Maintainer:    stewa02 <stewatwo@cpan.org>
+" License:       This plugin is distributed under the Vim-license.
+
+" Do not load, if loaded already
+if exists("g:loaded_[VIM_EVAL]expand("%:t:r")[END_EVAL]")
+    finish
+endif
+let g:loaded_[VIM_EVAL]expand("%:t:r")[END_EVAL] = 1
+
+" Save configuration and replace them with defaults
+" (line-continuation)
+let s:save_cpo = &cpo
+set cpo&vim
+
+" Restore user settings
+let &cpo = s:save_cpo
+
