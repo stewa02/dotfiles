@@ -10,11 +10,13 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{array}
+\usepackage{ulem}
 \usepackage{tabularx}
 \usepackage[table]{xcolor}
 % use Swiss-style quotation marks (like in French)
 \usepackage[autostyle,german=swiss]{csquotes}
-
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 % set font-familiy to sans-serif
 \renewcommand{\familydefault}{\sfdefault}
 % set font to Helvetica
@@ -42,7 +44,7 @@ $endif$
 
 $body$
 
-%$if(alignment)$
+$if(alignment)$
 \end{$alignment$}
 $endif$
 
