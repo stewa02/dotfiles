@@ -8,7 +8,7 @@ setlocal spell
 let g:tex_conceal="adgms"               " Replace LaTeX with Unicode symbols
 
 if has("unix") || has("linux")
-    call system("export max_print_line=9999")
+    let $max_print_line=9999
     let &l:makeprg = 'pdflatex --file-line-error --interaction=nonstopmode "'.
                    \ expand("%:p").'" --output-directory="'.expand("%:p:h").'"'
     let &l:errorformat = '%f:%l: %m'
