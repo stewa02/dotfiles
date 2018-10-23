@@ -14,6 +14,9 @@ setglobal fileencoding=utf-8            " Use UTF-8 encoding when writing file
 "
 colorscheme buddy
 let g:lightline = { 'colorscheme': 'buddy' }
+if has("win32")
+    let g:buddy_notermitalics = 1
+endif
 
 "
 " Filetype
@@ -43,7 +46,7 @@ set wildmode=list:longest,full          " Bash-like preview on autocomplete
 set infercase                           " Change completion to match case
 set nomore                              " Kein More (global)
 set hlsearch                            " Highlight all search results
-set scrolloff=2                         " Show 2 more rows on scrolling
+set scrolloff=5                         " Show 2 more rows on scrolling
 set sidescroll=5                        " Show 5 more columns in scrolling
 set showcmd                             " CMD immer anzeigen
 set showmatch                           " Highlight matching braces
@@ -113,7 +116,9 @@ set copyindent
 if v:version >= 800
     set breakindent                     " Breakindent for versions 8 and above
     set belloff=all                     " Turn all bells off with Vim 8 option
-    set termguicolors                   " Use proper colours in terminal
+    if !has("win32") && !has("gui_running")
+        set termguicolors               " Use proper colours in terminal
+    endif
 endif
 set splitright                          " Put new splits where they belong
 set splitbelow
@@ -121,21 +126,12 @@ set printheader=%<%F%=Seite\ %N         " Printer settings
 set printoptions=left:10pc,right:10pc,top:5pc,bottom:5pc,number:y
 set viminfo=h,'500,<10000,s1000,/1000,:1000 " Make viminfo file remember more
 set sessionoptions+=unix,slash          " Use shellslashes in sessions
-if has("win32") || has("win16")         " Write backups in separate directory
-    set backupdir=~/vimfiles/cache//    " and set path for swapfiles
-    set directory=~/vimfiles/cache//
-elseif has("unix") || has("linux")
-    set backupdir=~/.vim/cache//
-    set directory=~/.vim/cache//
-endif
+set backupdir=~/.vim/cache//,~/vimfiles/cache//
+set directory=~/.vim/cache//,~/vimfiles/cache//
 set backup                              " Actually turn backups on
 set writebackup
 set swapfile                            " Turn on swapfiles explicitly
-if has("win32") || has("win16")         " Turn on persistent undo and
-    set undodir=~/vimfiles/cache//      " set undo directory
-elseif has("unix") || has("linux")
-    set undodir=~/.vim/cache//
-endif
+set undodir=~/.vim/cache//,~/vimfiles/cache//
 set undofile                            " Actually turn on undofiles
 set conceallevel=2                      " Replace certain characters with the
 set concealcursor=nvc                   " proper symbol in normalmode
@@ -145,7 +141,6 @@ autocmd!
 autocmd InsertEnter * set norelativenumber
 autocmd InsertLeave * set relativenumber
 augroup END                             " in normal mode
-let cobol_legacy_code=1                 " Enable useful defaults for COBOL
 let g:netrw_liststyle=3                 " Make netrw a little more pleasant
 let g:netrw_banner=0
 let g:netrw_winsize=20
@@ -180,20 +175,13 @@ set spellsuggest=double,10              " Configure spelling suggestions
 " Include thesaurus files for German and English:
 " German: https://www.openthesaurus.de/about/download
 " English: http://www.gutenberg.org/ebooks/3202
-if has("linux") || has("unix")
-    set thesaurus+=~/.vim/thesaurus/de.txt
-    set thesaurus+=~/.vim/thesaurus/en.txt
-elseif has("win32") || has("win64")
-    set thesaurus+=~/vimfiles/thesaurus/de.txt
-    set thesaurus+=~/vimfiles/thesaurus/en.txt
-endif
+set thesaurus+=~/.vim/thesaurus/de.txt,~/vimfiles/thesaurus/de.txt
+set thesaurus+=~/.vim/thesaurus/en.txt,~/vimfiles/thesaurus/en.txt
 
 "
 " Mappings
 "
 let mapleader="\<Space>"
-nnoremap <leader>q :q<CR>
-nnoremap <leader>w :w<CR>
 nnoremap <leader>e :Vexplore<CR>
 nnoremap <leader>n :nohl<CR>
 " show different aspects of the with the buffer associated file
@@ -207,10 +195,6 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 " Disable arrowkeys
-noremap <Up> <Nop>
-noremap <Down> <Nop>
-noremap <Right> <Nop>
-noremap <Left> <Nop>
 inoremap <Up> <Nop>
 inoremap <Down> <Nop>
 inoremap <Right> <Nop>
@@ -221,13 +205,13 @@ nnoremap <Left> :tabp<CR>
 nnoremap <Down> :bn<CR>
 nnoremap <Up> :bp<CR>
 " Use visual lines for movement
-nnoremap j gj
-nnoremap k gk
+nnoremap <expr> j v:count == 0 ? 'gj' : 'j'
+nnoremap <expr> k v:count == 0 ? 'gk' : 'k'
 " make Y behave like D and C
 nnoremap Y y$
 " Use very-magic mode in regexes (Perl-like)
-nnoremap / /\v
-vnoremap / /\v
+" nnoremap / /\v
+" vnoremap / /\v
 nnoremap Q <Nop>
 " Indent with < and >
 vnoremap < <gv
@@ -251,14 +235,6 @@ nnoremap <leader>st :set spell!<CR>
 nnoremap <leader>ls :ls!<CR>:buffer<Space>
 
 "
-" Commands
-"
-command! WQ wq
-command! Wq wq
-command! W w
-command! Q q
-
-"
 " Resize all splits when resizing the window
 "
 augroup Resize
@@ -279,20 +255,15 @@ augroup END
 let g:tex_flavor="latex"
 
 "
-" Create backup directory, if it doesn't exists
-"
-if !isdirectory(expand(&backupdir))
-    call mkdir(expand(&backupdir), "p")
-endif
-
-"
 " Colorizer
 "
-let g:colorizer_nomap = 1
-augroup colorizer
-autocmd!
-autocmd VimEnter * ColorHighlight
-augroup END
+if has("gui_running")
+    let g:colorizer_nomap = 1
+    augroup colorizer
+    autocmd!
+    autocmd SessionLoadPost * ColorHighlight
+    augroup END
+endif
 
 "
 " Skeletor

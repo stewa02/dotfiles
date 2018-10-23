@@ -18,6 +18,10 @@ set cpo&vim
 " systems that use the forward slash "/" instead of the backslash "\". This
 " option uses the forward slash on all systems inside the session files.
 set sessionoptions+=unix,slash
+" Don't store vim options in session files. If this option is not set, new
+" settings from $MYVIMRC are not loaded (they are loaded and immediately
+" overwritten.
+"set sessionoptions-=options
 
 " Here we define two new plugin specific highlight groups, one for the "loaded
 " session successfully" (green font colour) and one for the "no session"
@@ -25,38 +29,12 @@ set sessionoptions+=unix,slash
 highlight SessionmanagerNoSession ctermfg=red guifg=#B40404 cterm=bold gui=bold
 highlight SessionmanagerLoaded ctermfg=green guifg=#04B404 cterm=bold gui=bold
 
-" Creates a personal directory for your vim files. It creates the folder 
-" ~/.vim on *nix and ~/vimfiles on Microsoft Windows. 
-" Reference: http://vimdoc.sourceforge.net/htmldoc/options.html#vimfiles
-if has("win32") || has("win16")
-    if !isdirectory($HOME."/vimfiles")
-        call mkdir($HOME."/vimfiles", "p")
-    endif
-elseif has("unix") || has("linux") || has("mac") || has("macunix")
-    if !isdirectory($HOME."/.vim")
-        call mkdir($HOME."/.vim", "p")
-    endif
-endif
-
-" Function that determines if a certain buffer is active in any of the open
-" tabs. This is necessary, because bufwinnr() only returns the correct answer
-" if you are in the corresponding tab.
-" Reference: https://groups.google.com/forum/#!topic/vim_use/0jaFyy5LR7A
-function! s:BufInTab(bufnr)
-    for l:tabnr in range(1,tabpagenr("$"))
-        if index(tabpagebuflist(l:tabnr), a:bufnr) != -1
-            return 0
-        endif
-    endfor
-    return 1
-endfunction
-
 " Simply saves the current session into the personal .vim directory
 function! s:SaveSess()
     if has("win32") || has("win16")
-        execute "mksession! ~/vimfiles/session.vim"
-    elseif has("unix") || has("linux") || has("mac") || has("macunix")
-        execute "mksession! ~/.vim/session.vim"
+        mksession! ~/vimfiles/session.vim
+    elseif has("unix")
+        mksession! ~/.vim/session.vim
     else
         echoerr "Operating system is not supported!"
     endif
@@ -71,35 +49,30 @@ function! s:RestoreSess()
         " Get argument list before loading session
         let l:arglist = []
         if !empty(argv())
-            argdo call add(l:arglist, expand("%:p"))
+            silent argdo call add(l:arglist, expand("%:p"))
         endif
         if has("win32") || has("win16")
             let l:time = strftime("%Y %b %d %X",getftime($HOME."/vimfiles/session.vim"))
-            execute "source ~/vimfiles/session.vim"
-        elseif has("unix") || has("linux") || has("mac") || has("macunix")
+            source ~/vimfiles/session.vim
+        elseif has("unix")
             let l:time = strftime("%Y %b %d %X",getftime($HOME."/.vim/session.vim"))
-            execute "source ~/.vim/session.vim"
+            source ~/.vim/session.vim
         else
             echoerr "Operating system is not supported!"
             return
         endif
 
-        if !exists("g:sessionmanager_loadall")
-            " Load arglist into seperate tabs
+        if !empty(l:arglist)
+            filetype on
+            tabnew
+
             for l:args in l:arglist
-                tabnew
-                execute ":buffer ".l:args
+                execute "argadd ".l:args
+                execute "edit   ".l:args
+                filetype detect
             endfor
-        else
-            " Load all hidden buffers into seperate tabs
-            if bufexists(1)
-                for l:bufnr in range(1, bufnr("$"))
-                    if s:BufInTab(l:bufnr)
-                        tabnew
-                        execute ":b".l:bufnr
-                    endif
-                endfor
-            endif
+
+            execute "buffer ".l:arglist[0]
         endif
     endif
 
@@ -124,12 +97,8 @@ function! s:RestoreSess()
 endfunction
 
 " Create command if they don't exist
-if !exists(":SaveSession") && !exists(":RestoreSession")
-    command! SaveSession    call <SID>SaveSess()
-    command! RestoreSession call <SID>RestoreSess()
-else
-    echoerr "No command created, because they already exist!"
-endif
+command! SaveSession    call <SID>SaveSess()
+command! RestoreSession call <SID>RestoreSess()
 
 " Set up autocommands for autosave and autoload
 augroup session
